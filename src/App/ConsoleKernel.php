@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Console;
+namespace App;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Foundation\Console\Kernel;
+use function base_path;
 
-class Kernel extends ConsoleKernel
+class ConsoleKernel extends Kernel
 {
     /**
      * Define the application's command schedule.
@@ -13,6 +14,7 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
