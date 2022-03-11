@@ -1,14 +1,15 @@
-name: Check & fix styling
+name: Mess detector
 
 on:
   push:
     paths:
       - '**.php'
+      - 'phpmd.xml'
 
 jobs:
-  style-fixer:
+  phpstan:
+    name: phpmd
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -21,5 +22,5 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v1
 
-      - name: Run ECS
-        run: ./vendor/bin/ecs check
+      - name: Run PHPMD
+        run: vendor/bin/phpmd src text phpmd.xml

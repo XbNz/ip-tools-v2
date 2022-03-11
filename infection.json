@@ -1,0 +1,19 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src",
+            "database/factories",
+            "database/seeders"
+        ]
+    },
+    "logs": {
+        "debug": "php://stdout",
+        "text": "php://stdout",
+        "summary": "php://stdout"
+    },
+    "minCoveredMsi": 80,
+    "mutators": {
+        "@default": true
+    }
+}
