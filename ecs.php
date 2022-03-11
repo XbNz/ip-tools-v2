@@ -14,6 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/database',
         __DIR__ . '/routes',
     ]);
+    
     $parameters->set(Option::PARALLEL, true);
 
     $containerConfigurator->import(SetList::PSR_12);
