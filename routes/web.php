@@ -1,6 +1,8 @@
 <?php
 
+use App\Web\Homepage\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return \Inertia\Inertia::render('Home');
-});
+Route::get('/', HomeController::class)->name('home.index');
+
+
