@@ -11,7 +11,9 @@
         "inertiajs/inertia-laravel": "^0.5.4",
         "laravel/framework": "^9.4.1",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "tightenco/ziggy": "^1.4",
+        "xbnz/laravel-multi-ip": "^1.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.5",
