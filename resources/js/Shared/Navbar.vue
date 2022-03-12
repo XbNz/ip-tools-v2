@@ -2,7 +2,7 @@
     <nav>
         <ul class="flex space-x-6">
             <li>
-                <Navlink href="/ip" :active="$page.component === ''">
+                <Navlink href="/" :active="$page.component === 'Home'">
                     <span class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" stroke-width="2">
@@ -14,7 +14,7 @@
                 </Navlink>
             </li>
             <li>
-                <Navlink href="/ip" :active="$page.component === ''">
+                <Navlink href="/ip" :active="$page.component === 'Ip'">
                     <span class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" stroke-width="2">
@@ -26,7 +26,7 @@
                 </Navlink>
             </li>
             <li>
-                <Navlink href="/ip" :active="$page.component === ''">
+                <Navlink href="/asn" :active="$page.component === 'Asn'">
                     <span class="flex">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" stroke-width="2">
