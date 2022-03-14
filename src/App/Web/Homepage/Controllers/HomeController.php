@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Web\Homepage\Controllers;
 
 use App\Web\Homepage\Requests\IndexHomeRequest;
-use Domain\IpAddressInfo\Actions\GuaranteedIpDataByIpForDriverAction;
+use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
+use Domain\IpAddressInfo\Actions\GuaranteedIpDataAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -17,10 +18,13 @@ class HomeController
 {
     public function __invoke(
         IndexHomeRequest $request,
-        GuaranteedIpDataByIpForDriverAction $dataByIpForDriverAction,
+        GuaranteedIpDataAction $guaranteedIpDataAction,
+        AdvancedIpDataAction $advancedIpDataAction,
     ): Response {
+
         $props = [
-            'guaranteedClientIpData' => $dataByIpForDriverAction('9.9.9.9'),
+            'guaranteedClientIpData' => $guaranteedIpDataAction('46.225.90.60'),
+            'advancedClientIpData' => $advancedIpDataAction('46.225.90.60'),
         ];
 
         return Inertia::render('Home', $props);

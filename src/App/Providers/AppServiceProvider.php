@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use App\Application;
 use App\Web\Homepage\Controllers\HomeController;
-use Domain\IpAddressInfo\Actions\GuaranteedIpDataByIpForDriverAction;
+use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
+use Domain\IpAddressInfo\Actions\GuaranteedIpDataAction;
 use Hoa\Protocol\Bin\Resolve;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -22,14 +23,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->when(GuaranteedIpDataByIpForDriverAction::class)
+        $this->app->when([GuaranteedIpDataAction::class, AdvancedIpDataAction::class])
             ->needs('$drivers')
-            ->give(
-                Collection::make(Config::get('services.ip_resolver_drivers_in_use'))
-                    ->map(function (string $driverName) {
-                        return $this->app->make($driverName);
-                    })->toArray()
-            );
+            ->give(function ($app) {
+                return Collection::make(Config::get('services.ip_resolver_drivers_in_use'))
+                    ->map(function (string $driverName) use ($app) {
+                        return $app->make($driverName);
+                    })->toArray();
+            });
     }
 
     /**

@@ -17,7 +17,7 @@ use XbNz\Resolver\Support\Drivers\Driver;
 use function Pipeline\map;
 
 
-class GuaranteedIpDataByIpForDriverAction
+class GuaranteedIpDataAction
 {
     public function __construct(
         private array $drivers,
