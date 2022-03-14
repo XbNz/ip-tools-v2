@@ -25,7 +25,9 @@ return [
     ],
 
     'ip_resolver_drivers_in_use' => [
-        'ipApiDotCom', 'ipGeolocationDotIo', 'ipInfoDotIo'
+        \XbNz\Resolver\Domain\Ip\Drivers\IpApiDotComDriver::class,
+        \XbNz\Resolver\Domain\Ip\Drivers\IpGeolocationDotIoDriver::class,
+        \XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver::class,
     ],
 
     'ses' => [

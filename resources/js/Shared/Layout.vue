@@ -7,15 +7,19 @@
     </section>
 
     <section class="p-6">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-5xl mx-auto">
             <slot/>
         </div>
     </section>
+
+
+
 
 </template>
 
 <script setup>
 import Navbar from "./Navbar";
+import Mapbox from "./Mapbox";
 </script>
 
 <style scoped>

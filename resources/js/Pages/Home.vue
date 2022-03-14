@@ -20,11 +20,10 @@
                 <div
                     class="hidden sm:block absolute bottom-0 h-1.5 bg-blue-400 transition-transform duration-300 ease-out w-2/4 transform translate-x-double"
                     :class="{'left-0' : tabMode === 'basic', 'right-0' : tabMode === 'advanced'}"></div>
-            </div>
+                </div>
 
             <div class="bg-white rounded-lg shadow-lg p-3">
-                <div class="flex flex-wrap mb-6" v-if="tabMode === 'basic'">
-
+                <div class="flex flex-wrap mb-3" v-if="tabMode === 'basic'">
                     <div class="ml-3">
                         <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
                         <div class="bg-white rounded-lg shadow-lg p-3">
@@ -32,18 +31,56 @@
                                 <p>{{ guaranteedData.driver }}</p>
                                 <div
                                     class="flex mb-3 w-12 h-7 flex items-center bg-gray-300 rounded-full p-1">
-                                    <button class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                         :class="{'translate-x-6': guaranteedData.driver === apiProviderToggle}"
-                                         @click="apiProviderToggle = guaranteedData.driver"
+                                    <button
+                                        class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
+                                        :class="{'translate-x-6': guaranteedData.driver === activeApiProvider.driver}"
+                                        @click="activeApiProvider = guaranteedData"
                                     />
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <div class="w-4/12 ml-3">
+                        <h1 class="justify-center flex mb-3 font-bold">Info</h1>
+                        <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-300">
+                            <div class="flex">
+                                <h2 class="font-bold">IP address: &nbsp;</h2>
+                                <p>{{ activeApiProvider.ip }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">API provider: &nbsp;</h2>
+                                <p>{{ activeApiProvider.driver }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">Country: &nbsp;</h2>
+                                <p>{{ activeApiProvider.country }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">City: &nbsp;</h2>
+                                <p>{{ activeApiProvider.city }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">Latitude: &nbsp;</h2>
+                                <p>{{ activeApiProvider.latitude }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">Latitude: &nbsp;</h2>
+                                <p>{{ activeApiProvider.longitude }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-5/12 p-3 ml-8 mt-5">
+                        <Mapbox :key="activeApiProvider" :mapboxBuildInfo="[{
+                            ip: activeApiProvider.ip,
+                            coordinates: [activeApiProvider.longitude, activeApiProvider.latitude]
+                        }]"/>
+                    </div>
 
 
                 </div>
+
 
                 <div class="flex flex-wrap mb-6" v-if="tabMode === 'advanced'">
 
@@ -109,6 +146,8 @@
 import {Head} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
 import {debounce} from "lodash";
+import Mapbox from "../Shared/Mapbox";
+
 
 let props = defineProps({
     guaranteedClientIpData: Array,
@@ -117,14 +156,10 @@ let props = defineProps({
 
 let tabMode = ref('basic');
 
-// Randomly select a key from the guaranteedClientIpData array and return the value
+let activeApiProvider = ref(
+    props.guaranteedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]
+)
 
-// let apiProviderToggle = ref(props.guaranteedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]);
-let apiProviderToggle = ref('');
-
-watch(apiProviderToggle, value => {
-    console.log(value);
-});
 
 let tabModes = {
     'basic': () => {
