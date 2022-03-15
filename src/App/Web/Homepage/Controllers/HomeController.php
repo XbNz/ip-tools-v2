@@ -31,7 +31,6 @@ class HomeController
             'advancedClientIpData' => $advancedIpDataAction('46.225.90.60'),
         ];
 
-
         return Inertia::render('Home', $props);
     }
 }
