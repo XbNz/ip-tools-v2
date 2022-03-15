@@ -12,6 +12,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Inertia\Inertia;
 use Inertia\Response;
+use Torchlight\Blade\CodeComponent;
+use Torchlight\Block;
+use Torchlight\Client;
+use Torchlight\Torchlight;
 use XbNz\Resolver\Resolver\Resolver;
 
 class HomeController
@@ -26,6 +30,7 @@ class HomeController
             'guaranteedClientIpData' => $guaranteedIpDataAction('46.225.90.60'),
             'advancedClientIpData' => $advancedIpDataAction('46.225.90.60'),
         ];
+
 
         return Inertia::render('Home', $props);
     }

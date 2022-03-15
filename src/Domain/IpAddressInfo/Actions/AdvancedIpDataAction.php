@@ -2,6 +2,7 @@
 
 namespace Domain\IpAddressInfo\Actions;
 
+use Domain\IpAddressInfo\DataTransferObjects\AdvancedIpData;
 use Domain\IpAddressInfo\DataTransferObjects\GuaranteedIpData;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -21,7 +22,7 @@ class AdvancedIpDataAction
     /**
      * @var Collection $collection
      * @var Collection $keyValuePair
-     * @return Collection<Collection>
+     * @return Collection<AdvancedIpData>
      */
     public function __invoke(string $ipAddress): Collection
     {
@@ -38,10 +39,10 @@ class AdvancedIpDataAction
                     ->lower()
                     ->toString();
 
-
-                return [$friendlyDriverName => $rawApiReturn];
-            })->mapWithKeys(function($item, $key) {
-                return $item;
+                return new AdvancedIpData(
+                    $friendlyDriverName,
+                    $rawApiReturn,
+                );
             });
     }
 }

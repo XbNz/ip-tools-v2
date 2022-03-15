@@ -20,13 +20,13 @@
                 <div
                     class="hidden sm:block absolute bottom-0 h-1.5 bg-blue-400 transition-transform duration-300 ease-out w-2/4 transform translate-x-double"
                     :class="{'left-0' : tabMode === 'basic', 'right-0' : tabMode === 'advanced'}"></div>
-                </div>
+            </div>
 
             <div class="bg-white rounded-lg shadow-lg p-3">
                 <div class="flex flex-wrap mb-3" v-if="tabMode === 'basic'">
                     <div class="ml-3">
                         <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
-                        <div class="bg-white rounded-lg shadow-lg p-3">
+                        <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
                             <div v-for="guaranteedData in props.guaranteedClientIpData">
                                 <p>{{ guaranteedData.driver }}</p>
                                 <div
@@ -81,28 +81,35 @@
                 </div>
 
 
-                <div class="flex flex-wrap mb-3" v-if="tabMode === 'advanced'">
-                    <div class="ml-3">
-                        <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
-                        <div class="bg-white rounded-lg shadow-lg p-3">
-                            <div v-for="guaranteedData in props.guaranteedClientIpData">
-                                <p>{{ guaranteedData.driver }}</p>
-                                <div
-                                    class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
-                                    <button
-                                        class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                        :class="{'translate-x-6': guaranteedData.driver === activeApiProvider.driver}"
-                                        @click="activeApiProvider = guaranteedData"
-                                    />
+                <div class="mb-3" v-if="tabMode === 'advanced'">
+                    <div class="flex">
+                        <div class="ml-3">
+                            <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
+                            <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
+                                <div v-for="advancedData in props.advancedClientIpData">
+                                    <p>{{ advancedData.driver }}</p>
+                                    <div
+                                        class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
+                                        <button
+                                            class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
+                                            :class="{'translate-x-6': advancedData.driver === activeAdvancedApiProvider.driver}"
+                                            @click="activeAdvancedApiProvider = advancedData"
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="w-10/12 ml-3">
+                            <h1 class="justify-center flex mb-3 font-bold">Info</h1>
+                            <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
+                                <div class="flex">
+                                    <pre>{{ activeAdvancedApiProvider.data }}</pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -171,6 +178,10 @@ let tabMode = ref('basic');
 
 let activeApiProvider = ref(
     props.guaranteedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]
+)
+
+let activeAdvancedApiProvider = ref(
+    props.advancedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]
 )
 
 
