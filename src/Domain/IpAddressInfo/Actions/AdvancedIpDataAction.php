@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Domain\IpAddressInfo\Actions;
 
 use Domain\IpAddressInfo\DataTransferObjects\AdvancedIpData;

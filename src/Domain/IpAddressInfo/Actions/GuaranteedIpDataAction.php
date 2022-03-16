@@ -7,6 +7,7 @@ namespace Domain\IpAddressInfo\Actions;
 use Domain\IpAddressInfo\DataTransferObjects\GuaranteedIpData;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Support\Actions\FriendlyDriverNameAction;
 use Webmozart\Assert\Assert;
 use XbNz\Resolver\Domain\Ip\Actions\VerifyIpIntegrityAction;
 use XbNz\Resolver\Domain\Ip\Builders\DriverBuilder;
@@ -21,6 +22,7 @@ class GuaranteedIpDataAction
 {
     public function __construct(
         private array $drivers,
+        private FriendlyDriverNameAction $friendlyDriverNameAction,
         private VerifyIpIntegrityAction $verifyIpIntegrityAction,
     )
     {}
@@ -38,11 +40,8 @@ class GuaranteedIpDataAction
         return Collection::make($this->drivers)
             ->map(function (Driver $driver) use ($ipDataDto) {
                 $queriedDataDto = $driver->query($ipDataDto);
-                $friendlyDriverName = Str::of((new \ReflectionObject($driver))->getShortName())
-                    ->replace('Driver', '')
-                    ->replace('Dot', '.')
-                    ->lower()
-                    ->toString();
+
+                $friendlyDriverName = ($this->friendlyDriverNameAction)($driver::class);
 
                 return new GuaranteedIpData(
                     $friendlyDriverName,

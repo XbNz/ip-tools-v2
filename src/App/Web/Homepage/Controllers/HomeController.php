@@ -27,8 +27,8 @@ class HomeController
     ): Response {
 
         $props = [
-            'guaranteedClientIpData' => $guaranteedIpDataAction('46.225.90.60'),
-            'advancedClientIpData' => $advancedIpDataAction('46.225.90.60'),
+            'guaranteedClientIpData' => $guaranteedIpDataAction($request->getClientIp()),
+            'advancedClientIpData' => $advancedIpDataAction($request->getClientIp()),
         ];
 
         return Inertia::render('Home', $props);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\IpAddressInfo\Actions;
 
 use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
