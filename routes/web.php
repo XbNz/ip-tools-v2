@@ -17,4 +17,3 @@ use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('home.index');
 
-

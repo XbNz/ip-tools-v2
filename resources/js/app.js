@@ -3,7 +3,6 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import Layout from "./Shared/Layout";
 import {InertiaProgress} from "@inertiajs/progress";
 
-
 createInertiaApp({
     resolve: name => {
         let page = require(`./Pages/${name}`).default;
