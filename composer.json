@@ -10,8 +10,10 @@
         "guzzlehttp/guzzle": "^7.4",
         "inertiajs/inertia-laravel": "^0.5.4",
         "laravel/framework": "^9.4.1",
+        "laravel/octane": "^1.2",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "spiral/roadrunner": "^2.8.2",
         "tightenco/ziggy": "^1.4",
         "torchlight/torchlight-laravel": "^0.5.11",
         "xbnz/laravel-multi-ip": "^1.0"
