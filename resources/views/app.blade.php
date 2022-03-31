@@ -8,7 +8,7 @@
     <script src="{{ mix('/js/app.js') }}" defer></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
-
+    @routes
     @inertiaHead
 </head>
 <body>

@@ -10,7 +10,7 @@ class FakeDriver implements Driver
 {
     public function query(IpData $ipData): QueriedIpData
     {
-        $response = $this->raw();
+        $response = $this->raw($ipData);
 
         return new QueriedIpData(
             driver: self::class,

@@ -25,7 +25,6 @@ class HomeController
         GuaranteedIpDataAction $guaranteedIpDataAction,
         AdvancedIpDataAction $advancedIpDataAction,
     ): Response {
-
         $props = [
             'guaranteedClientIpData' => $guaranteedIpDataAction('1.1.1.1'),
             'advancedClientIpData' => $advancedIpDataAction('1.1.1.1'),

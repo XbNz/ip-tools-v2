@@ -115,22 +115,27 @@
     </div>
 
 
+    <IpLookupModal :show="ipLookup">
+
+    </IpLookupModal>
+
     <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 p-3">
             <h1 class="text-2xl font-bold mb-3">IP Lookup</h1>
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="lookupIP">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="ipLookupApi">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="ip">
                         IP Address
                     </label>
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="ip" type="text" placeholder="IP Address" v-model="ip">
+                        id="ip" type="text" placeholder="IP Address" v-model="ipLookupForm.ipAddresses">
                 </div>
                 <div class="flex items-center justify-between">
                     <button
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit">
+                        :disabled="ipLookupForm.processing"
                         Lookup
                     </button>
                 </div>
@@ -138,7 +143,7 @@
         </div>
         <div class="w-full md:w-1/2 p-3">
             <h1 class="text-2xl font-bold mb-3">AS Lookup</h1>
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="lookupAS">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="as">
                         AS Number
@@ -162,16 +167,57 @@
 </template>
 
 <script setup>
-import {Head} from '@inertiajs/inertia-vue3'
+import {Head, useForm} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
 import {debounce} from "lodash";
 import Mapbox from "../Shared/Mapbox";
+import IpLookupModal from "../Shared/IpLookupModal";
 
 
 let props = defineProps({
     guaranteedClientIpData: Array,
     advancedClientIpData: Array,
 });
+
+const ipLookup = ref(false);
+const asLookup = ref(false);
+
+const ipLookupData = ref([]);
+const asLookupData = ref([]);
+
+
+const ipLookupForm = useForm({
+    ipAddresses: [],
+});
+const asLookupForm = useForm({
+    asNumbers: [],
+});
+
+
+watch(ipLookupData, () => {
+    ipLookup.value = true;
+});
+watch(asLookupData, () => {
+    asLookup.value = true;
+});
+
+
+const closeModals = () => {
+    ipLookup.value = false;
+    asLookup.value = false;
+
+    ipLookupForm.reset();
+    asLookupForm.reset();
+};
+
+const ipLookupApi = () => {
+    ipLookupData.value = ipLookupForm.post(route('ip.show'), {
+        preserveScroll: true,
+        onFinish: () => ipLookupForm.reset(),
+    });
+
+    // TODO: Comma-separate the IP addresses and send them as an array (watch maybe?)
+};
 
 
 let tabMode = ref('basic');

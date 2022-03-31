@@ -20,7 +20,9 @@ class AdvancedIpAddressInfoController
 
         return response()->json(
             [
-                'data' => Collection::make($request->get('ip_addresses'))->map(fn($ip) => $advancedIpDataAction($ip))
+                'data' => Collection::make(
+                    $request->get('ip_addresses'))->map(fn($ip) => $advancedIpDataAction($ip)
+                )
             ]
         );
     }
