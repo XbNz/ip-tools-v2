@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-                    <div class="w-4/12 ml-3">
+                    <div class="w-5/12 ml-3">
                         <h1 class="justify-center flex mb-3 font-bold">Info</h1>
                         <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
                             <div class="flex">
@@ -72,12 +72,13 @@
                         </div>
                     </div>
 
-                    <div class="w-6/12 mt-4 p-4 rounded-full">
-                        <Mapbox :key="activeApiProvider" :mapboxBuildInfo="[{
+                    <div id="map-home" class="w-4/12 ml-10 mt-4 p-4">
+                    </div>
+
+                    <Mapbox :key="activeApiProvider" :mapboxBuildInfo="[{
                             ip: activeApiProvider.ip,
                             coordinates: [activeApiProvider.longitude, activeApiProvider.latitude]
-                        }]"/>
-                    </div>
+                        }]" bind-to="map-home"/>
                 </div>
 
 
@@ -115,22 +116,28 @@
     </div>
 
 
+    <IpLookupModal :show="ipLookupResultsReady" :ip-address-info="ipLookupData"/>
+
     <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 p-3">
             <h1 class="text-2xl font-bold mb-3">IP Lookup</h1>
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="lookupIP">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="ipLookupApi">
+                <div v-if="ipLookupErrors" class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2" role="alert">
+                    <p v-for="error in ipLookupErrors">{{ error.toString() }}</p>
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="ip">
                         IP Address
                     </label>
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="ip" type="text" placeholder="IP Address" v-model="ip">
+                        id="ip" type="text" placeholder="IP Address" v-model="ipLookupField">
                 </div>
                 <div class="flex items-center justify-between">
                     <button
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit">
+                        type="submit"
+                    >
                         Lookup
                     </button>
                 </div>
@@ -138,7 +145,7 @@
         </div>
         <div class="w-full md:w-1/2 p-3">
             <h1 class="text-2xl font-bold mb-3">AS Lookup</h1>
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="lookupAS">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="as">
                         AS Number
@@ -162,16 +169,91 @@
 </template>
 
 <script setup>
-import {Head} from '@inertiajs/inertia-vue3'
+import {Head, useForm} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
 import {debounce} from "lodash";
 import Mapbox from "../Shared/Mapbox";
+import IpLookupModal from "../Shared/IpLookupModal";
+import axios from "axios";
 
 
 let props = defineProps({
     guaranteedClientIpData: Array,
     advancedClientIpData: Array,
 });
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeModals();
+    }
+});
+
+
+
+
+const ipLookup = ref(false);
+const asLookup = ref(false);
+
+const ipLookupField = ref('');
+const asLookupField = ref('');
+
+const ipLookupData = ref({});
+const asLookupData = ref({});
+
+const ipLookupResultsReady = ref(false);
+
+const ipLookupErrors = ref();
+const asLookupErrors = ref();
+
+
+const ipLookupForm = useForm({
+    ip_addresses: [],
+});
+const asLookupForm = useForm({
+    as_numbers: [],
+});
+
+
+const closeModals = () => {
+    ipLookupResultsReady.value = false;
+
+    ipLookupForm.reset();
+    asLookupForm.reset();
+};
+
+const ipLookupApi = () => {
+    ipLookupForm.ip_addresses = ipLookupField.value.split(',').map(ip => ip.trim());
+    ipLookupForm.ip_addresses.splice(1);
+
+    axios.post(route('ip.show', ipLookupForm))
+        .then(response => {
+            ipLookupData.value.basic = response.data;
+            ipLookupResultsReady.value = true;
+        })
+        .catch(error => {
+            ipLookupErrors.value = error.response.data.errors;
+            ipLookupResultsReady.value = false;
+        });
+
+    axios.post(route('ip.advanced.show', ipLookupForm))
+        .then(response => {
+            ipLookupData.value.advanced = response.data;
+            ipLookupResultsReady.value = true;
+        })
+        .catch(error => {
+            ipLookupErrors.value = error.response.data.errors;
+            ipLookupResultsReady.value = false;
+        });
+};
+
+// const asLookupApi = () => {
+//     asLookupField.ipAddresses = asLookupField.value.split(',').map(as => as.trim());
+//
+//     ipLookupData.value = ipLookupForm.post(route('ip.show'), {
+//         preserveScroll: true,
+//         onFinish: () => ipLookupForm.reset(),
+//     });
+// };
 
 
 let tabMode = ref('basic');
