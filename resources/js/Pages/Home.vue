@@ -116,14 +116,21 @@
     </div>
 
 
-    <IpLookupModal :show="ipLookupResultsReady" :ip-address-info="ipLookupData"/>
+
+    <IpLookupModal :show="ipLookupResultsReady" :ip-address-info="ipLookupData">
+        <div class="fixed top-0 left-0 mr-4 mb-4">
+            <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent" @click="closeModals">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
+            </button>
+        </div>
+    </IpLookupModal>
 
     <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 p-3">
             <h1 class="text-2xl font-bold mb-3">IP Lookup</h1>
             <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="ipLookupApi">
                 <div v-if="ipLookupErrors" class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2" role="alert">
-                    <p v-for="error in ipLookupErrors">{{ error.toString() }}</p>
+                    <p> {{ ipLookupErrors }}</p>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="ip">
@@ -177,6 +184,7 @@ import IpLookupModal from "../Shared/IpLookupModal";
 import axios from "axios";
 
 
+
 let props = defineProps({
     guaranteedClientIpData: Array,
     advancedClientIpData: Array,
@@ -187,9 +195,6 @@ document.addEventListener('keydown', (e) => {
         closeModals();
     }
 });
-
-
-
 
 const ipLookup = ref(false);
 const asLookup = ref(false);
@@ -216,12 +221,11 @@ const asLookupForm = useForm({
 
 const closeModals = () => {
     ipLookupResultsReady.value = false;
-
-    ipLookupForm.reset();
-    asLookupForm.reset();
 };
 
 const ipLookupApi = () => {
+    closeModals();
+
     ipLookupForm.ip_addresses = ipLookupField.value.split(',').map(ip => ip.trim());
     ipLookupForm.ip_addresses.splice(1);
 
@@ -231,8 +235,9 @@ const ipLookupApi = () => {
             ipLookupResultsReady.value = true;
         })
         .catch(error => {
-            ipLookupErrors.value = error.response.data.errors;
+            ipLookupErrors.value = error.response.data.message;
             ipLookupResultsReady.value = false;
+            console.log(error);
         });
 
     axios.post(route('ip.advanced.show', ipLookupForm))
@@ -241,7 +246,7 @@ const ipLookupApi = () => {
             ipLookupResultsReady.value = true;
         })
         .catch(error => {
-            ipLookupErrors.value = error.response.data.errors;
+            ipLookupErrors.value = error.response.data.message;
             ipLookupResultsReady.value = false;
         });
 };

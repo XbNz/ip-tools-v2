@@ -112,7 +112,9 @@
                 </div>
             </div>
         </div>
+        <slot/>
     </Modal>
+
 </template>
 
 <script setup>
@@ -147,6 +149,7 @@ let activeApiProvider = ref()
 let activeAdvancedApiProvider = ref()
 
 watch(props.ipAddressInfo, (newVal, oldVal) => {
+
     if (newVal.basic) {
         activeApiProvider.value = newVal.basic['data'][0][Math.floor(Math.random() * Object.keys(newVal.basic['data'][0]).length)];
     }
@@ -154,6 +157,7 @@ watch(props.ipAddressInfo, (newVal, oldVal) => {
     if (newVal.advanced) {
         activeAdvancedApiProvider.value = newVal.advanced['data'][0][Math.floor(Math.random() * Object.keys(newVal.advanced['data'][0]).length)];
     }
+
 })
 
 
