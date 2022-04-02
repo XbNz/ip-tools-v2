@@ -1,6 +1,6 @@
 <template>
-    <div id="map"/>
-    <slot/>
+<!--    <div id="map"/>-->
+<!--    <slot/>-->
 </template>
 
 
@@ -10,11 +10,14 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { onMounted } from "vue";
 
 export default {
-    // Require prop "coordinates" to be passed in
     props: {
         mapboxBuildInfo: {
             type: Array,
-        }
+        },
+        bindTo: {
+            type: String,
+            default: "map",
+        },
     },
 
 
@@ -22,7 +25,7 @@ export default {
         mapboxgl.accessToken =
             "pk.eyJ1IjoieGJueiIsImEiOiJjbDBweGxsNDUwN25tM2NwNjk0OWI0N3l3In0.q78iWSWl0j_UBJhsNP8BwA";
         const map = new mapboxgl.Map({
-            container: "map",
+            container: this.bindTo,
             style: "mapbox://styles/mapbox/light-v9",
         });
 

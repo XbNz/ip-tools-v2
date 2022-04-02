@@ -24,6 +24,7 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
         "mapbox-gl": "^2.7.0",
+        "v-click-outside": "^3.1.2",
         "vue": "^3.2.31"
     }
 }

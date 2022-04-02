@@ -8,6 +8,7 @@ use App\Api\IpAddressInfo\Requests\IpAddressInfoRequest;
 use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
 use Domain\IpAddressInfo\Actions\GuaranteedIpDataAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 

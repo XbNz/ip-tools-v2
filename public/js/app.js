@@ -19313,6 +19313,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Shared_Mapbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Shared/Mapbox */ "./resources/js/Shared/Mapbox.vue");
 /* harmony import */ var _Shared_IpLookupModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Shared/IpLookupModal */ "./resources/js/Shared/IpLookupModal.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -19327,38 +19330,61 @@ __webpack_require__.r(__webpack_exports__);
     var expose = _ref.expose;
     expose();
     var props = __props;
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeModals();
+      }
+    });
     var ipLookup = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
     var asLookup = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
-    var ipLookupData = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
-    var asLookupData = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
+    var ipLookupField = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
+    var asLookupField = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('');
+    var ipLookupData = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)({});
+    var asLookupData = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)({});
+    var ipLookupResultsReady = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
+    var ipLookupErrors = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)();
+    var asLookupErrors = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)();
     var ipLookupForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
-      ipAddresses: []
+      ip_addresses: []
     });
     var asLookupForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
-      asNumbers: []
-    });
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(ipLookupData, function () {
-      ipLookup.value = true;
-    });
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(asLookupData, function () {
-      asLookup.value = true;
+      as_numbers: []
     });
 
     var closeModals = function closeModals() {
-      ipLookup.value = false;
-      asLookup.value = false;
+      ipLookupResultsReady.value = false;
       ipLookupForm.reset();
       asLookupForm.reset();
     };
 
     var ipLookupApi = function ipLookupApi() {
-      ipLookupData.value = ipLookupForm.post(route('ip.show'), {
-        preserveScroll: true,
-        onFinish: function onFinish() {
-          return ipLookupForm.reset();
-        }
-      }); // TODO: Comma-separate the IP addresses and send them as an array (watch maybe?)
-    };
+      ipLookupForm.ip_addresses = ipLookupField.value.split(',').map(function (ip) {
+        return ip.trim();
+      });
+      ipLookupForm.ip_addresses.splice(1);
+      axios__WEBPACK_IMPORTED_MODULE_5___default().post(route('ip.show', ipLookupForm)).then(function (response) {
+        ipLookupData.value.basic = response.data;
+        ipLookupResultsReady.value = true;
+      })["catch"](function (error) {
+        ipLookupErrors.value = error.response.data.errors;
+        ipLookupResultsReady.value = false;
+      });
+      axios__WEBPACK_IMPORTED_MODULE_5___default().post(route('ip.advanced.show', ipLookupForm)).then(function (response) {
+        ipLookupData.value.advanced = response.data;
+        ipLookupResultsReady.value = true;
+      })["catch"](function (error) {
+        ipLookupErrors.value = error.response.data.errors;
+        ipLookupResultsReady.value = false;
+      });
+    }; // const asLookupApi = () => {
+    //     asLookupField.ipAddresses = asLookupField.value.split(',').map(as => as.trim());
+    //
+    //     ipLookupData.value = ipLookupForm.post(route('ip.show'), {
+    //         preserveScroll: true,
+    //         onFinish: () => ipLookupForm.reset(),
+    //     });
+    // };
+
 
     var tabMode = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('basic');
     var activeApiProvider = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(props.guaranteedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]);
@@ -19375,8 +19401,13 @@ __webpack_require__.r(__webpack_exports__);
       props: props,
       ipLookup: ipLookup,
       asLookup: asLookup,
+      ipLookupField: ipLookupField,
+      asLookupField: asLookupField,
       ipLookupData: ipLookupData,
       asLookupData: asLookupData,
+      ipLookupResultsReady: ipLookupResultsReady,
+      ipLookupErrors: ipLookupErrors,
+      asLookupErrors: asLookupErrors,
       ipLookupForm: ipLookupForm,
       asLookupForm: asLookupForm,
       closeModals: closeModals,
@@ -19391,7 +19422,8 @@ __webpack_require__.r(__webpack_exports__);
       watch: vue__WEBPACK_IMPORTED_MODULE_1__.watch,
       debounce: lodash__WEBPACK_IMPORTED_MODULE_2__.debounce,
       Mapbox: _Shared_Mapbox__WEBPACK_IMPORTED_MODULE_3__["default"],
-      IpLookupModal: _Shared_IpLookupModal__WEBPACK_IMPORTED_MODULE_4__["default"]
+      IpLookupModal: _Shared_IpLookupModal__WEBPACK_IMPORTED_MODULE_4__["default"],
+      axios: (axios__WEBPACK_IMPORTED_MODULE_5___default())
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -19415,19 +19447,56 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modal */ "./resources/js/Shared/Modal.vue");
- // defineProps({
-//     ipAddressInfo: {
-//         type: Array,
-//         required: true,
-//     },
-// })
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Mapbox__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Mapbox */ "./resources/js/Shared/Mapbox.vue");
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    ipAddressInfo: {
+      type: Object,
+      required: true
+    },
+    show: {
+      type: Boolean,
+      required: true
+    }
+  },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
+    var props = __props;
+    var tabModes = {
+      'basic': function basic() {
+        tabMode.value = 'basic';
+      },
+      'advanced': function advanced() {
+        tabMode.value = 'advanced';
+      }
+    };
+    var activeApiProvider = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)();
+    var activeAdvancedApiProvider = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)();
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(props.ipAddressInfo, function (newVal, oldVal) {
+      if (newVal.basic) {
+        activeApiProvider.value = newVal.basic['data'][0][Math.floor(Math.random() * Object.keys(newVal.basic['data'][0]).length)];
+      }
+
+      if (newVal.advanced) {
+        activeAdvancedApiProvider.value = newVal.advanced['data'][0][Math.floor(Math.random() * Object.keys(newVal.advanced['data'][0]).length)];
+      }
+    });
+    var tabMode = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)('basic');
     var __returned__ = {
-      Modal: _Modal__WEBPACK_IMPORTED_MODULE_0__["default"]
+      props: props,
+      tabModes: tabModes,
+      activeApiProvider: activeApiProvider,
+      activeAdvancedApiProvider: activeAdvancedApiProvider,
+      tabMode: tabMode,
+      Modal: _Modal__WEBPACK_IMPORTED_MODULE_0__["default"],
+      ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
+      watch: vue__WEBPACK_IMPORTED_MODULE_1__.watch,
+      Mapbox: _Mapbox__WEBPACK_IMPORTED_MODULE_2__["default"]
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -19491,10 +19560,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  // Require prop "coordinates" to be passed in
   props: {
     mapboxBuildInfo: {
       type: Array
+    },
+    bindTo: {
+      type: String,
+      "default": "map"
     }
   },
   mounted: function mounted() {
@@ -19502,7 +19574,7 @@ __webpack_require__.r(__webpack_exports__);
 
     (mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default().accessToken) = "pk.eyJ1IjoieGJueiIsImEiOiJjbDBweGxsNDUwN25tM2NwNjk0OWI0N3l3In0.q78iWSWl0j_UBJhsNP8BwA";
     var map = new (mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default().Map)({
-      container: "map",
+      container: this.bindTo,
       style: "mapbox://styles/mapbox/light-v9"
     });
     map.setMaxZoom(8);
@@ -19618,7 +19690,11 @@ __webpack_require__.r(__webpack_exports__);
         'md': 'sm:max-w-md',
         'lg': 'sm:max-w-lg',
         'xl': 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl'
+        '2xl': 'sm:max-w-2xl',
+        '3xl': 'sm:max-w-3xl',
+        '4xl': 'sm:max-w-4xl',
+        '5xl': 'sm:max-w-5xl',
+        '6xl': 'sm:max-w-6xl'
       }[props.maxWidth];
     });
     var __returned__ = {
@@ -19756,7 +19832,7 @@ var _hoisted_11 = {
 };
 var _hoisted_12 = ["onClick"];
 var _hoisted_13 = {
-  "class": "w-4/12 ml-3"
+  "class": "w-5/12 ml-3"
 };
 
 var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
@@ -19828,9 +19904,13 @@ var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_28 = {
-  "class": "w-6/12 mt-4 p-4 rounded-full"
-};
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  id: "map-home",
+  "class": "w-4/12 ml-10 mt-4 p-4"
+}, null, -1
+/* HOISTED */
+);
+
 var _hoisted_29 = {
   key: 1,
   "class": "mb-3"
@@ -19886,47 +19966,52 @@ var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_43 = ["onSubmit"];
 var _hoisted_44 = {
+  key: 0,
+  "class": "bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2",
+  role: "alert"
+};
+var _hoisted_45 = {
   "class": "mb-4"
 };
 
-var _hoisted_45 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "block text-gray-700 text-sm font-bold mb-2",
   "for": "ip"
 }, " IP Address ", -1
 /* HOISTED */
 );
 
-var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "flex items-center justify-between"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   "class": "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
   type: "submit"
-}, " :disabled=\"ipLookupForm.processing\" Lookup ")], -1
+}, " Lookup ")], -1
 /* HOISTED */
 );
 
-var _hoisted_47 = {
+var _hoisted_48 = {
   "class": "w-full md:w-1/2 p-3"
 };
 
-var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+var _hoisted_49 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "text-2xl font-bold mb-3"
 }, "AS Lookup", -1
 /* HOISTED */
 );
 
-var _hoisted_49 = {
+var _hoisted_50 = {
   "class": "mb-4"
 };
 
-var _hoisted_50 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_51 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "block text-gray-700 text-sm font-bold mb-2",
   "for": "as"
 }, " AS Number ", -1
 /* HOISTED */
 );
 
-var _hoisted_51 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_52 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   "class": "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
   type: "submit"
 }, " Lookup ")], -1
@@ -19985,15 +20070,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.longitude), 1
   /* TEXT */
-  )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Mapbox"], {
+  )])])]), _hoisted_28, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Mapbox"], {
     key: $setup.activeApiProvider,
     mapboxBuildInfo: [{
       ip: $setup.activeApiProvider.ip,
       coordinates: [$setup.activeApiProvider.longitude, $setup.activeApiProvider.latitude]
-    }]
+    }],
+    "bind-to": "map-home"
   }, null, 8
   /* PROPS */
-  , ["mapboxBuildInfo"]))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.tabMode === 'advanced' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.advancedClientIpData, function (advancedData) {
+  , ["mapboxBuildInfo"]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.tabMode === 'advanced' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.advancedClientIpData, function (advancedData) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(advancedData.driver), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -20011,28 +20097,35 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [_hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("pre", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeAdvancedApiProvider.data), 1
   /* TEXT */
   )])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["IpLookupModal"], {
-    show: $setup.ipLookup
+    show: $setup.ipLookupResultsReady,
+    "ip-address-info": $setup.ipLookupData
   }, null, 8
   /* PROPS */
-  , ["show"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  , ["show", "ip-address-info"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     "class": "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
     onSubmit: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.ipLookupApi, ["prevent"])
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [_hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [$setup.ipLookupErrors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_44, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.ipLookupErrors, function (error) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(error.toString()), 1
+    /* TEXT */
+    );
+  }), 256
+  /* UNKEYED_FRAGMENT */
+  ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [_hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
     id: "ip",
     type: "text",
     placeholder: "IP Address",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $setup.ipLookupForm.ipAddresses = $event;
+      return $setup.ipLookupField = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.ipLookupForm.ipAddresses]])]), _hoisted_46], 40
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.ipLookupField]])]), _hoisted_47], 40
   /* PROPS, HYDRATE_EVENTS */
-  , _hoisted_43)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [_hoisted_48, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  , _hoisted_43)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [_hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     "class": "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
     onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {}, ["prevent"]))
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [_hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
     id: "as",
     type: "text",
@@ -20042,7 +20135,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.as]])]), _hoisted_51], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.as]])]), _hoisted_52], 32
   /* HYDRATE_EVENTS */
   )])])], 64
   /* STABLE_FRAGMENT */
@@ -20064,11 +20157,241 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  "class": "flex flex-wrap mb-5"
+};
+var _hoisted_2 = {
+  "class": "w-full mt-2"
+};
+var _hoisted_3 = {
+  "class": "w-full flex sm:border-b sm:border-gray-300 relative flex-col sm:flex-row"
+};
+var _hoisted_4 = {
+  key: 0,
+  "class": "flex flex-wrap mb-3 p-3 rounded-lg"
+};
+var _hoisted_5 = {
+  "class": "ml-3"
+};
+
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "justify-center flex mb-3 font-bold"
+}, "API provider", -1
+/* HOISTED */
+);
+
+var _hoisted_7 = {
+  "class": "bg-white rounded-lg shadow-lg p-3 outline outline-amber-600"
+};
+var _hoisted_8 = {
+  "class": "flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1"
+};
+var _hoisted_9 = ["onClick"];
+var _hoisted_10 = {
+  "class": "w-5/12 ml-3"
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "justify-center flex mb-3 font-bold"
+}, "Info", -1
+/* HOISTED */
+);
+
+var _hoisted_12 = {
+  "class": "bg-white rounded-lg shadow-lg p-3 outline outline-amber-600"
+};
+var _hoisted_13 = {
+  "class": "flex"
+};
+
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "IP address:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_15 = {
+  "class": "flex"
+};
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "API provider:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_17 = {
+  "class": "flex"
+};
+
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "Country:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_19 = {
+  "class": "flex"
+};
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "City:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_21 = {
+  "class": "flex"
+};
+
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "Latitude:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_23 = {
+  "class": "flex"
+};
+
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "font-bold"
+}, "Latitude:  ", -1
+/* HOISTED */
+);
+
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  id: "map-modal",
+  "class": "w-4/12 ml-10 mt-4 p-4"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_26 = {
+  key: 1,
+  "class": "mb-3 p-3"
+};
+var _hoisted_27 = {
+  "class": "flex"
+};
+var _hoisted_28 = {
+  "class": "ml-3"
+};
+
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "justify-center flex mb-3 font-bold"
+}, "API provider", -1
+/* HOISTED */
+);
+
+var _hoisted_30 = {
+  "class": "bg-white rounded-lg shadow-lg p-3 outline outline-amber-600"
+};
+var _hoisted_31 = {
+  "class": "flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1"
+};
+var _hoisted_32 = ["onClick"];
+var _hoisted_33 = {
+  "class": "w-10/12 ml-3"
+};
+
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "justify-center flex mb-3 font-bold"
+}, "Info", -1
+/* HOISTED */
+);
+
+var _hoisted_35 = {
+  "class": "bg-white rounded-lg shadow-lg p-3 outline outline-amber-600"
+};
+var _hoisted_36 = {
+  "class": "flex"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Modal"], {
     closeable: true,
-    show: true
-  });
+    show: $props.show,
+    "max-width": "6xl"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        "class": "flex-1 sm:text-center font-medium pb-3 cursor-pointer hover:text-blue-400 false",
+        onClick: _cache[0] || (_cache[0] = function ($event) {
+          return $setup.tabModes.basic();
+        })
+      }, " Basic "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        "class": "flex-1 sm:text-center font-medium pb-3 cursor-pointer hover:text-blue-400 false",
+        onClick: _cache[1] || (_cache[1] = function ($event) {
+          return $setup.tabModes.advanced();
+        })
+      }, " Advanced "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["hidden sm:block absolute bottom-0 h-1.5 bg-blue-400 transition-transform duration-300 ease-out w-2/4 transform translate-x-double", {
+          'left-0': $setup.tabMode === 'basic',
+          'right-0': $setup.tabMode === 'advanced'
+        }])
+      }, null, 2
+      /* CLASS */
+      )]), $setup.tabMode === 'basic' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.ipAddressInfo.basic.data[0], function (guaranteedData) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(guaranteedData.driver), 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out", {
+            'translate-x-6': guaranteedData.driver === $setup.activeApiProvider.driver
+          }]),
+          onClick: function onClick($event) {
+            return $setup.activeApiProvider = guaranteedData;
+          }
+        }, null, 10
+        /* CLASS, PROPS */
+        , _hoisted_9)])]);
+      }), 256
+      /* UNKEYED_FRAGMENT */
+      ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.ip), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.driver), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.country), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.city), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.latitude), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeApiProvider.longitude), 1
+      /* TEXT */
+      )])])]), _hoisted_25, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Mapbox"], {
+        key: $setup.activeApiProvider,
+        mapboxBuildInfo: [{
+          ip: $setup.activeApiProvider.ip,
+          coordinates: [$setup.activeApiProvider.longitude, $setup.activeApiProvider.latitude]
+        }],
+        "bind-to": "map-modal"
+      }, null, 8
+      /* PROPS */
+      , ["mapboxBuildInfo"]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.tabMode === 'advanced' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [_hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.ipAddressInfo.advanced.data[0], function (advancedData) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(advancedData.driver), 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out", {
+            'translate-x-6': advancedData.driver === $setup.activeAdvancedApiProvider.driver
+          }]),
+          onClick: function onClick($event) {
+            return $setup.activeAdvancedApiProvider = advancedData;
+          }
+        }, null, 10
+        /* CLASS, PROPS */
+        , _hoisted_32)])]);
+      }), 256
+      /* UNKEYED_FRAGMENT */
+      ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [_hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("pre", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.activeAdvancedApiProvider.data), 1
+      /* TEXT */
+      )])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["show"]);
 }
 
 /***/ }),
@@ -20126,15 +20449,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
-
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  id: "map"
-}, null, -1
-/* HOISTED */
-);
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")], 64
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <div id=\"map\"/>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <slot/>")], 64
   /* STABLE_FRAGMENT */
   );
 }
