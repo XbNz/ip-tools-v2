@@ -8,6 +8,7 @@ use Domain\IpAddressInfo\DataTransferObjects\AdvancedIpData;
 use Domain\IpAddressInfo\DataTransferObjects\GuaranteedIpData;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Support\Actions\FriendlyDriverNameAction;
 use Webmozart\Assert\Assert;
 use XbNz\Resolver\Domain\Ip\Actions\VerifyIpIntegrityAction;
 use XbNz\Resolver\Domain\Ip\DTOs\IpData;
@@ -17,6 +18,7 @@ class AdvancedIpDataAction
 {
     public function __construct(
         private array $drivers,
+        private FriendlyDriverNameAction $friendlyDriverNameAction,
         private VerifyIpIntegrityAction $verifyIpIntegrityAction,
     )
     {}
@@ -34,12 +36,7 @@ class AdvancedIpDataAction
         return Collection::make($this->drivers)
             ->map(function (Driver $driver) use ($ipDataDto) {
                 $rawApiReturn = $driver->raw($ipDataDto);
-
-                $friendlyDriverName = Str::of((new \ReflectionObject($driver))->getShortName())
-                    ->replace('Driver', '')
-                    ->replace('Dot', '.')
-                    ->lower()
-                    ->toString();
+                $friendlyDriverName = ($this->friendlyDriverNameAction)($driver::class);
 
                 return new AdvancedIpData(
                     $friendlyDriverName,

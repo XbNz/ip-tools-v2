@@ -13,6 +13,10 @@ return [
         'ipInfoDotIo' => [
             'dd4ce596215c8d',
         ],
+
+        'ipDataDotCo' => [
+            'b566af4f0bbf51cc53d1d1acf029476514d9c230919262f50bfce582',
+        ],
     ],
 
     'databases' => [

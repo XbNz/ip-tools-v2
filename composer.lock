@@ -6221,16 +6221,16 @@
         },
         {
             "name": "xbnz/laravel-multi-ip",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/XbNz/laravel-multi-ip.git",
-                "reference": "b76ba016fd734ee500d236664c3b71e6972df8b8"
+                "reference": "0eb1df4234a89c3319383ba78ca66b8659c2f742"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/XbNz/laravel-multi-ip/zipball/b76ba016fd734ee500d236664c3b71e6972df8b8",
-                "reference": "b76ba016fd734ee500d236664c3b71e6972df8b8",
+                "url": "https://api.github.com/repos/XbNz/laravel-multi-ip/zipball/0eb1df4234a89c3319383ba78ca66b8659c2f742",
+                "reference": "0eb1df4234a89c3319383ba78ca66b8659c2f742",
                 "shasum": ""
             },
             "require": {
@@ -6272,9 +6272,9 @@
             "description": "Wrapper for several IP resolver APIs",
             "support": {
                 "issues": "https://github.com/XbNz/laravel-multi-ip/issues",
-                "source": "https://github.com/XbNz/laravel-multi-ip/tree/1.0.0"
+                "source": "https://github.com/XbNz/laravel-multi-ip/tree/1.1.0"
             },
-            "time": "2021-10-23T15:49:17+00:00"
+            "time": "2022-04-03T22:41:14+00:00"
         }
     ],
     "packages-dev": [
@@ -7545,16 +7545,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.5.3",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "39953ac1452a8843702ee41a35b4861d3e8207a7"
+                "reference": "bbf68cae24f6dc023c607ea0f87da55dd9d55c2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/39953ac1452a8843702ee41a35b4861d3e8207a7",
-                "reference": "39953ac1452a8843702ee41a35b4861d3e8207a7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bbf68cae24f6dc023c607ea0f87da55dd9d55c2b",
+                "reference": "bbf68cae24f6dc023c607ea0f87da55dd9d55c2b",
                 "shasum": ""
             },
             "require": {
@@ -7580,7 +7580,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.5.3"
+                "source": "https://github.com/phpstan/phpstan/tree/1.5.4"
             },
             "funding": [
                 {
@@ -7600,7 +7600,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-30T21:55:08+00:00"
+            "time": "2022-04-03T12:39:00+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -8441,16 +8441,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "5.1.3",
+            "version": "5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "388b6ced16caa751030f6a69e588299fa09200ac"
+                "reference": "1b5dff7bb151a4db11d49d90e5408e4e938270f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/388b6ced16caa751030f6a69e588299fa09200ac",
-                "reference": "388b6ced16caa751030f6a69e588299fa09200ac",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/1b5dff7bb151a4db11d49d90e5408e4e938270f7",
+                "reference": "1b5dff7bb151a4db11d49d90e5408e4e938270f7",
                 "shasum": ""
             },
             "require": {
@@ -8492,7 +8492,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/environment/issues",
-                "source": "https://github.com/sebastianbergmann/environment/tree/5.1.3"
+                "source": "https://github.com/sebastianbergmann/environment/tree/5.1.4"
             },
             "funding": [
                 {
@@ -8500,7 +8500,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-28T05:52:38+00:00"
+            "time": "2022-04-03T09:37:03+00:00"
         },
         {
             "name": "sebastian/exporter",

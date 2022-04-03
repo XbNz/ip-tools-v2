@@ -28,6 +28,7 @@ return [
         \XbNz\Resolver\Domain\Ip\Drivers\IpApiDotComDriver::class,
         \XbNz\Resolver\Domain\Ip\Drivers\IpGeolocationDotIoDriver::class,
         \XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver::class,
+        \XbNz\Resolver\Domain\Ip\Drivers\IpDataDotCoDriver::class,
     ],
 
     'ses' => [
