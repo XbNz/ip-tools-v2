@@ -34,6 +34,7 @@ class AdvancedIpDataAction
         Assert::isInstanceOf($ipDataDto, IpData::class);
 
         return Collection::make($this->drivers)
+            ->each->initiateAsync($ipDataDto)
             ->map(function (Driver $driver) use ($ipDataDto) {
                 $rawApiReturn = $driver->raw($ipDataDto);
                 $friendlyDriverName = ($this->friendlyDriverNameAction)($driver::class);
