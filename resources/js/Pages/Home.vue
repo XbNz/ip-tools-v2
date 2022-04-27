@@ -27,13 +27,13 @@
                     <div class="ml-3">
                         <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
                         <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
-                            <div v-for="guaranteedData in props.guaranteedClientIpData">
-                                <p>{{ guaranteedData.driver }}</p>
+                            <div v-for="(guaranteedData, provider) in props.guaranteedClientIpData">
+                                <p>{{ provider }}</p>
                                 <div
                                     class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
                                     <button
                                         class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                        :class="{'translate-x-6': guaranteedData.driver === activeApiProvider.driver}"
+                                        :class="{'translate-x-6': guaranteedData === activeApiProvider}"
                                         @click="activeApiProvider = guaranteedData"
                                     />
                                 </div>
@@ -50,10 +50,6 @@
                                 <p>{{ activeApiProvider.ip }}</p>
                             </div>
                             <div class="flex">
-                                <h2 class="font-bold">API provider: &nbsp;</h2>
-                                <p>{{ activeApiProvider.driver }}</p>
-                            </div>
-                            <div class="flex">
                                 <h2 class="font-bold">Country: &nbsp;</h2>
                                 <p>{{ activeApiProvider.country }}</p>
                             </div>
@@ -66,8 +62,12 @@
                                 <p>{{ activeApiProvider.latitude }}</p>
                             </div>
                             <div class="flex">
-                                <h2 class="font-bold">Latitude: &nbsp;</h2>
+                                <h2 class="font-bold">Longitude: &nbsp;</h2>
                                 <p>{{ activeApiProvider.longitude }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">Organization: &nbsp;</h2>
+                                <p>{{ activeApiProvider.organization }}</p>
                             </div>
                         </div>
                     </div>
@@ -87,13 +87,13 @@
                         <div class="ml-3">
                             <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
                             <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
-                                <div v-for="advancedData in props.advancedClientIpData">
-                                    <p>{{ advancedData.driver }}</p>
+                                <div v-for="(advancedData, provider) in props.advancedClientIpData">
+                                    <p>{{ provider }}</p>
                                     <div
                                         class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
                                         <button
                                             class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                            :class="{'translate-x-6': advancedData.driver === activeAdvancedApiProvider.driver}"
+                                            :class="{'translate-x-6': advancedData === activeAdvancedApiProvider}"
                                             @click="activeAdvancedApiProvider = advancedData"
                                         />
                                     </div>
@@ -150,26 +150,26 @@
                 </div>
             </form>
         </div>
-        <div class="w-full md:w-1/2 p-3">
-            <h1 class="text-2xl font-bold mb-3">AS Lookup</h1>
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="as">
-                        AS Number
-                    </label>
-                    <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="as" type="text" placeholder="AS Number" v-model="as">
-                </div>
-                <div>
-                    <button
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit">
-                        Lookup
-                    </button>
-                </div>
-            </form>
-        </div>
+<!--        <div class="w-full md:w-1/2 p-3">-->
+<!--            <h1 class="text-2xl font-bold mb-3">AS Lookup</h1>-->
+<!--            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="">-->
+<!--                <div class="mb-4">-->
+<!--                    <label class="block text-gray-700 text-sm font-bold mb-2" for="as">-->
+<!--                        AS Number-->
+<!--                    </label>-->
+<!--                    <input-->
+<!--                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"-->
+<!--                        id="as" type="text" placeholder="AS Number" v-model="as">-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <button-->
+<!--                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"-->
+<!--                        type="submit">-->
+<!--                        Lookup-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
     </div>
 
 
@@ -205,6 +205,7 @@ const asLookupField = ref('');
 const ipLookupData = ref({});
 const asLookupData = ref({});
 
+const ipLookupResultsCount = ref(0);
 const ipLookupResultsReady = ref(false);
 
 const ipLookupErrors = ref();
@@ -221,54 +222,55 @@ const asLookupForm = useForm({
 
 const closeModals = () => {
     ipLookupResultsReady.value = false;
+    ipLookupResultsCount.value = 0;
 };
 
 const ipLookupApi = () => {
-    closeModals();
-
     ipLookupForm.ip_addresses = ipLookupField.value.split(',').map(ip => ip.trim());
     ipLookupForm.ip_addresses.splice(1);
 
     axios.post(route('ip.show', ipLookupForm))
         .then(response => {
             ipLookupData.value.basic = response.data;
-            ipLookupResultsReady.value = true;
+            // ipLookupResultsReady.value = true;
+            ipLookupResultsCount.value++;
         })
         .catch(error => {
             ipLookupErrors.value = error.response.data.message;
-            ipLookupResultsReady.value = false;
-            console.log(error);
+            // ipLookupResultsReady.value = false;
+            ipLookupResultsCount.value--;
         });
 
     axios.post(route('ip.advanced.show', ipLookupForm))
         .then(response => {
             ipLookupData.value.advanced = response.data;
-            ipLookupResultsReady.value = true;
+            // ipLookupResultsReady.value = true;
+            ipLookupResultsCount.value++;
         })
         .catch(error => {
             ipLookupErrors.value = error.response.data.message;
-            ipLookupResultsReady.value = false;
+            // ipLookupResultsReady.value = false;
+            ipLookupResultsCount.value--;
         });
 };
 
-// const asLookupApi = () => {
-//     asLookupField.ipAddresses = asLookupField.value.split(',').map(as => as.trim());
-//
-//     ipLookupData.value = ipLookupForm.post(route('ip.show'), {
-//         preserveScroll: true,
-//         onFinish: () => ipLookupForm.reset(),
-//     });
-// };
-
+watch(ipLookupResultsCount, (newValue, oldValue) => {
+    // console.log(newValue);
+    if (newValue > 2) {
+        ipLookupResultsReady.value = true;
+    }
+});
 
 let tabMode = ref('basic');
 
+let activeKeys = Object.keys(props.guaranteedClientIpData);
 let activeApiProvider = ref(
-    props.guaranteedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]
+    props.guaranteedClientIpData[activeKeys[Math.floor(Math.random() * activeKeys.length)]]
 )
 
+let activeAdvancedKeys = Object.keys(props.advancedClientIpData);
 let activeAdvancedApiProvider = ref(
-    props.advancedClientIpData[Math.floor(Math.random() * props.guaranteedClientIpData.length)]
+    props.advancedClientIpData[activeAdvancedKeys[Math.floor(Math.random() * activeAdvancedKeys.length)]]
 )
 
 

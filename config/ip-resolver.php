@@ -1,26 +1,43 @@
 <?php
 
+use XbNz\Resolver\Domain\Ip\Drivers\AbstractApiDotComDriver;
+use XbNz\Resolver\Domain\Ip\Drivers\AbuseIpDbDotComDriver;
+use XbNz\Resolver\Domain\Ip\Drivers\IpDataDotCoDriver;
+use XbNz\Resolver\Domain\Ip\Drivers\IpGeolocationDotIoDriver;
+use XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver;
+
 return [
+
     'api-keys' => [
-        'ipApiDotCom' => [
-            '10e58aa40f198b53e365ac02e7faf37f',
+        IpGeolocationDotIoDriver::class => [
+            env('IP_GEOLOCATION_DOT_IO_KEY_1')
         ],
 
-        'ipGeolocationDotIo' => [
-            '4ccb1d5f495b461aa6348dd168b77d03',
+        IpInfoDotIoDriver::class => [
+            env('IP_INFO_DOT_IO_KEY_1')
         ],
 
-        'ipInfoDotIo' => [
-            'dd4ce596215c8d',
+        AbuseIpDbDotComDriver::class => [
+            env('ABUSE_IP_DB_DOT_COM_KEY_1')
         ],
 
-        'ipDataDotCo' => [
-            'b566af4f0bbf51cc53d1d1acf029476514d9c230919262f50bfce582',
+        AbstractApiDotComDriver::class => [
+            env('ABSTRACT_API_DOT_COM_IP_API_KEY_1')
+        ],
+
+        IpDataDotCoDriver::class => [
+            env('IP_DATA_DOT_CO_KEY_1')
         ],
     ],
 
-    'databases' => [
-//        'maxMind' => ,
-//        'ipDb' => ,
-    ]
+    /**
+     * Visit https://mtr.sh/probes.json to retrieve the list of probe IDs
+     */
+    \XbNz\Resolver\Domain\Ip\Drivers\MtrDotShMtrDriver::class => [
+        'search' => ['germany']
+    ],
+
+    \XbNz\Resolver\Domain\Ip\Drivers\MtrDotShPingDriver::class => [
+        'search' => ['germany']
+    ],
 ];

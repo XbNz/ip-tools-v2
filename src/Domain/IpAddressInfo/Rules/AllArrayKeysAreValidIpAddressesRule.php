@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\IpAddressInfo;
+namespace Domain\IpAddressInfo\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Collection;
@@ -14,12 +14,12 @@ class AllArrayKeysAreValidIpAddressesRule implements Rule
     {
         return ! Collection::make($value)
             ->map(function ($ipAddress) {
-                try {
-                    $integrityAction = app(VerifyIpIntegrityAction::class);
-                    return $integrityAction->execute($ipAddress) instanceof IpData;
-                } catch (InvalidIpAddressException $e) {
-                    return false;
-                }
+                return (bool) filter_var(
+                    $ipAddress,
+                    FILTER_VALIDATE_IP,
+                    FILTER_FLAG_NO_PRIV_RANGE |
+                    FILTER_FLAG_NO_RES_RANGE
+                );
             })->contains(false);
     }
 

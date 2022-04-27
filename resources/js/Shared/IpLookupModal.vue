@@ -27,13 +27,13 @@
                     <div class="ml-3">
                         <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
                         <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
-                            <div v-for="guaranteedData in props.ipAddressInfo.basic.data[0]">
-                                <p>{{ guaranteedData.driver }}</p>
+                            <div v-for="(guaranteedData, provider) in props.ipAddressInfo.basic">
+                                <p>{{ provider }}</p>
                                 <div
                                     class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
                                     <button
                                         class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                        :class="{'translate-x-6': guaranteedData.driver === activeApiProvider.driver}"
+                                        :class="{'translate-x-6': guaranteedData === activeApiProvider}"
                                         @click="activeApiProvider = guaranteedData"
                                     />
                                 </div>
@@ -50,10 +50,6 @@
                                 <p>{{ activeApiProvider.ip }}</p>
                             </div>
                             <div class="flex">
-                                <h2 class="font-bold">API provider: &nbsp;</h2>
-                                <p>{{ activeApiProvider.driver }}</p>
-                            </div>
-                            <div class="flex">
                                 <h2 class="font-bold">Country: &nbsp;</h2>
                                 <p>{{ activeApiProvider.country }}</p>
                             </div>
@@ -66,8 +62,12 @@
                                 <p>{{ activeApiProvider.latitude }}</p>
                             </div>
                             <div class="flex">
-                                <h2 class="font-bold">Latitude: &nbsp;</h2>
+                                <h2 class="font-bold">Longitude: &nbsp;</h2>
                                 <p>{{ activeApiProvider.longitude }}</p>
+                            </div>
+                            <div class="flex">
+                                <h2 class="font-bold">Organization: &nbsp;</h2>
+                                <p>{{ activeApiProvider.organization }}</p>
                             </div>
                         </div>
                     </div>
@@ -86,13 +86,13 @@
                         <div class="ml-3">
                             <h1 class="justify-center flex mb-3 font-bold">API provider</h1>
                             <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
-                                <div v-for="advancedData in props.ipAddressInfo.advanced.data[0]">
-                                    <p>{{ advancedData.driver }}</p>
+                                <div v-for="(advancedData, provider) in props.ipAddressInfo.advanced">
+                                    <p>{{ provider }}</p>
                                     <div
                                         class="flex mb-3 w-12 h-7 items-center bg-gray-300 rounded-full p-1">
                                         <button
                                             class="bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out"
-                                            :class="{'translate-x-6': advancedData.driver === activeAdvancedApiProvider.driver}"
+                                            :class="{'translate-x-6': advancedData === activeAdvancedApiProvider}"
                                             @click="activeAdvancedApiProvider = advancedData"
                                         />
                                     </div>
@@ -151,16 +151,15 @@ let activeAdvancedApiProvider = ref()
 watch(props.ipAddressInfo, (newVal, oldVal) => {
 
     if (newVal.basic) {
-        activeApiProvider.value = newVal.basic['data'][0][Math.floor(Math.random() * Object.keys(newVal.basic['data'][0]).length)];
+        let activeKeys = Object.keys(newVal.basic);
+        activeApiProvider.value = newVal.basic[activeKeys[Math.floor(Math.random() * activeKeys.length)]];
     }
 
     if (newVal.advanced) {
-        activeAdvancedApiProvider.value = newVal.advanced['data'][0][Math.floor(Math.random() * Object.keys(newVal.advanced['data'][0]).length)];
+        let activeAdvancedKeys = Object.keys(newVal.advanced);
+        activeAdvancedApiProvider.value = newVal.advanced[activeAdvancedKeys[Math.floor(Math.random() * activeAdvancedKeys.length)]];
     }
-
 })
-
-
 
 let tabMode = ref('basic');
 
