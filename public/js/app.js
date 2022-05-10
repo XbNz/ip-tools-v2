@@ -19322,7 +19322,6 @@ var __default__ = {
       'email': '',
       'password': ''
     });
-    console.log(_ziggy__WEBPACK_IMPORTED_MODULE_1__.Ziggy);
 
     var submit = function submit() {
       form.post(route('auth.login.store'));
@@ -19895,21 +19894,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "text",
     placeholder: "Email",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.email = $event;
+      return $setup.form.email = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.email]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.email]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
     id: "password",
     type: "password",
     placeholder: "Password",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return _ctx.password = $event;
+      return $setup.form.password = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.password]])]), _hoisted_7], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.password]])]), _hoisted_7], 32
   /* HYDRATE_EVENTS */
   )])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
@@ -20888,13 +20887,13 @@ var Ziggy = {
       "uri": "\/",
       "methods": ["GET", "HEAD"]
     },
-    "login.create": {
-      "uri": "login",
-      "methods": ["GET", "HEAD"]
-    },
-    "login.store": {
+    "auth.login.store": {
       "uri": "login",
       "methods": ["POST"]
+    },
+    "auth.login.create": {
+      "uri": "login",
+      "methods": ["GET", "HEAD"]
     }
   }
 };
