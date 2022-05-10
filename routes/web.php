@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
 
-Route::group(['as' => 'auth.'], function () {
+Route::name('auth.')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login.create');
     Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 });

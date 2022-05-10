@@ -23,7 +23,6 @@ class LoginController
 
     public function store(StoreLoginRequest $request): RedirectResponse
     {
-        dd('test');
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
