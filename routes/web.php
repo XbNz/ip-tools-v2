@@ -1,5 +1,6 @@
 <?php
 
+use App\Web\Authentication\Controllers\LoginController;
 use App\Web\Homepage\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,5 +16,10 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', HomeController::class)->name('home.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', HomeController::class)->name('home.index');
+});
 
+Route::group(['name' => 'auth.'], function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+});
