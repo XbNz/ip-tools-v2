@@ -3,6 +3,7 @@
 use App\Web\Authentication\Controllers\LoginController;
 use App\Web\Homepage\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Web\Authentication\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,18 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
 
 Route::name('auth.')->group(function () {
-    Route::get('/login', [LoginController::class, 'create'])->name('login.create');
-    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+    Route::get('/login', [LoginController::class, 'create'])->name('login.create')
+        ->middleware('guest');
+
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store')
+        ->middleware('guest', 'throttle:5,1');
+
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy')
+        ->middleware('auth');
+
+    Route::get('/register', [RegisterController::class, 'create'])->name('register.create')
+        ->middleware('guest');
+
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store')
+        ->middleware(['guest', 'throttle:5,1']);
 });

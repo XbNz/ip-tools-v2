@@ -27,11 +27,17 @@ class LoginController
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return Redirect::intended();
+            return Redirect::intended('/');
         }
 
         return Redirect::back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    public function destroy(): RedirectResponse
+    {
+        Auth::logout();
+        return Redirect::route('auth.login.create');
     }
 }
