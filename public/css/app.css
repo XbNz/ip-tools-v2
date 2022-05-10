@@ -530,6 +530,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .block {
   display: block;
 }
+.inline-block {
+  display: inline-block;
+}
 .flex {
   display: flex;
 }
@@ -550,6 +553,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .h-4 {
   height: 1rem;
+}
+.h-screen {
+  height: 100vh;
 }
 .w-full {
   width: 100%;
@@ -574,6 +580,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-4 {
   width: 1rem;
+}
+.w-1\/2 {
+  width: 50%;
 }
 .max-w-5xl {
   max-width: 64rem;
@@ -728,6 +737,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .pb-8 {
   padding-bottom: 2rem;
 }
+.align-baseline {
+  vertical-align: baseline;
+}
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -771,6 +783,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 .underline {
   -webkit-text-decoration-line: underline;
@@ -861,6 +877,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.hover\:text-blue-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity));
 }
 .hover\:underline:hover {
   -webkit-text-decoration-line: underline;

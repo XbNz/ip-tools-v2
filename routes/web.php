@@ -3,7 +3,6 @@
 use App\Web\Authentication\Controllers\LoginController;
 use App\Web\Homepage\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +19,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', HomeController::class)->name('home.index');
 });
 
-Route::group(['name' => 'auth.'], function () {
-    Route::get('/login', [LoginController::class, 'create'])->name('login');
+
+Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
+
+Route::group(['as' => 'auth.'], function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login.create');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 });
