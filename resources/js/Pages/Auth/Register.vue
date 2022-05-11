@@ -40,7 +40,7 @@
                         Sign up
                     </button>
 
-                    <InertiaLink :href="route('auth.login.create')" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"></InertiaLink>
+<!--                    <InertiaLink :href="route('auth.login.create')" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"></InertiaLink>-->
 
                 </div>
             </form>
