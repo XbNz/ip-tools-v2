@@ -2,6 +2,8 @@
 
 namespace App\Web\Authentication\Controllers;
 
+use App\Web\Authentication\FormRequests\StoreRegisterRequest;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -17,8 +19,10 @@ class RegisterController
         return $this->inertiaFactory->render('Auth/Register');
     }
 
-    public function store(): Response
-    {
+    public function store(
+        StoreRegisterRequest $request
+
+    ): RedirectResponse {
 
     }
 }

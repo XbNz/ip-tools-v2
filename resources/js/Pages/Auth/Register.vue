@@ -17,6 +17,13 @@
                 </div>
 
                 <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                        Name
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Name" v-model="form.name">
+                </div>
+
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
                         Email
                     </label>
@@ -40,8 +47,9 @@
                         Sign up
                     </button>
 
-<!--                    <InertiaLink :href="route('auth.login.create')" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"></InertiaLink>-->
-
+                    <Link :href="route('auth.login.create')" class="text-black hover:underline">
+                        Have an account?
+                    </Link>
                 </div>
             </form>
         </div>
@@ -56,9 +64,11 @@ export default {
 
 <script setup>
 import {useForm} from "@inertiajs/inertia-vue3";
-import {Ziggy} from "../../ziggy";
+import { Link } from '@inertiajs/inertia-vue3'
+
 
 let form = useForm({
+    'name': '',
     'email': '',
     'password': '',
     'password_confirmed': '',
@@ -69,7 +79,3 @@ let submit = () => {
 };
 
 </script>
-
-<style scoped>
-
-</style>
