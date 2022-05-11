@@ -26,7 +26,7 @@ return [
 
     'ip_resolver_drivers_in_use' => [
         \XbNz\Resolver\Domain\Ip\Drivers\IpGeolocationDotIoDriver::class,
-         \XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver::class,
+//         \XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver::class,
         \XbNz\Resolver\Domain\Ip\Drivers\IpDataDotCoDriver::class,
     ],
 
