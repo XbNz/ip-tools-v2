@@ -37,10 +37,10 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password_confirmed">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password_confirmation">
                         Confirm Password
                     </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password_confirmed" type="password" placeholder="Confirm" v-model="form.password_confirmed">
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password_confirmation" type="password" placeholder="Confirm" v-model="form.password_confirmation">
                 </div>
                 <div class="flex items-center justify-between">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -71,7 +71,7 @@ let form = useForm({
     'name': '',
     'email': '',
     'password': '',
-    'password_confirmed': '',
+    'password_confirmation': '',
 });
 
 let submit = () => {
