@@ -24,11 +24,12 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
 
 Route::name('auth.')->group(function () {
+
     Route::get('/login', [LoginController::class, 'create'])->name('login.create')
         ->middleware('guest');
 
     Route::post('/login', [LoginController::class, 'store'])->name('login.store')
-        ->middleware('guest', 'throttle:5,1');
+        ->middleware('guest', 'throttle:50,1');
 
     Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy')
         ->middleware('auth');
@@ -37,5 +38,5 @@ Route::name('auth.')->group(function () {
         ->middleware('guest');
 
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store')
-        ->middleware(['guest', 'throttle:5,1']);
+        ->middleware(['guest', 'throttle:50,1']);
 });

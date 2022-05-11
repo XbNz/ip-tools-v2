@@ -13,6 +13,7 @@
         "laravel/octane": "^1.2",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "spatie/laravel-data": "^1.4",
         "spiral/roadrunner": "^2.8.2",
         "tightenco/ziggy": "^1.4",
         "torchlight/torchlight-laravel": "^0.5.11",
