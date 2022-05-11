@@ -3,6 +3,7 @@
 namespace App\Web\Authentication\Controllers;
 
 use App\Web\Authentication\FormRequests\StoreRegisterRequest;
+use Domain\User\DataTransferObjects\RegisterUserData;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -20,9 +21,8 @@ class RegisterController
     }
 
     public function store(
-        StoreRegisterRequest $request
-
+        RegisterUserData $data,
     ): RedirectResponse {
-
+        dd(request());
     }
 }
