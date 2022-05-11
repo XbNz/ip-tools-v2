@@ -7,6 +7,7 @@ use App\Web\Homepage\Controllers\HomeController;
 use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
 use Domain\IpAddressInfo\Actions\GuaranteedIpDataAction;
 use Hoa\Protocol\Bin\Resolve;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -23,14 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->when([GuaranteedIpDataAction::class, AdvancedIpDataAction::class])
-            ->needs('$drivers')
-            ->give(function ($app) {
-                return Collection::make(Config::get('services.ip_resolver_drivers_in_use'))
-                    ->map(function (string $driverName) use ($app) {
-                        return $app->make($driverName);
-                    })->toArray();
-            });
+        //
     }
 
     /**
@@ -40,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Model::unguard();
     }
 }
