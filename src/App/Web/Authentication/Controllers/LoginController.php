@@ -3,7 +3,9 @@
 namespace App\Web\Authentication\Controllers;
 
 use App\Web\Authentication\FormRequests\StoreLoginRequest;
+use Domain\User\DataTransferObjects\LoginUserData;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Response;
@@ -21,11 +23,9 @@ class LoginController
         return $this->inertiaFactory->render('Auth/Login');
     }
 
-    public function store(StoreLoginRequest $request): RedirectResponse
+    public function store(LoginUserData $data, Request $request): RedirectResponse
     {
-        $credentials = $request->validated();
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($data->toArray())) {
             $request->session()->regenerate();
             return Redirect::intended('/');
         }
