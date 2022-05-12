@@ -8,10 +8,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class IndexHomeRequest extends FormRequest
 {
-    public function rules(): void
+    public function rules(): array
     {
-//        return [
-//
-//        ];
+        return [
+
+        ];
     }
 }
