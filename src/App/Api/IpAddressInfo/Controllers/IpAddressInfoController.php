@@ -6,19 +6,17 @@ namespace App\Api\IpAddressInfo\Controllers;
 
 use App\Api\IpAddressInfo\Requests\IpAddressInfoRequest;
 use Domain\IpAddressInfo\Actions\PrepareNormalizedIpDataAction;
+use Domain\IpAddressInfo\DataTransferObjects\IpInfoRequestData;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-
 
 class IpAddressInfoController
 {
     public function __invoke(
-        IpAddressInfoRequest   $request,
+        IpInfoRequestData $data,
         PrepareNormalizedIpDataAction $normalizeIpDataAction,
     ): JsonResponse {
         return response()->json(
-            $normalizeIpDataAction($request->get('ip_addresses'))
+            $normalizeIpDataAction($data->ip_addresses)
         );
     }
 }

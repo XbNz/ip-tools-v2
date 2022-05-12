@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Support\Actions;
 
 use Illuminate\Support\Str;
 use ReflectionClass;
-use ReflectionException;
 use XbNz\Resolver\Support\Drivers\Driver;
 
 class FriendlyDriverNameAction

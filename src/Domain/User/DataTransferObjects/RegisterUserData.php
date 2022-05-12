@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Domain\User\DataTransferObjects;
 
 use Illuminate\Http\Request;
@@ -14,17 +16,10 @@ class RegisterUserData extends Data
         public readonly string $name,
         #[Email([Email::RfcValidation, Email::DnsCheckValidation])]
         public readonly string $email,
-        #[Password(min: 2, uncompromised: true), Confirmed]
+        #[Password(min: 2, uncompromised: true),
+        Confirmed]
         public readonly string $password,
     ) {
     }
 
-    public static function fromRequest(Request $request): self
-    {
-        return new self(
-            $request->input('name'),
-            $request->input('email'),
-            $request->input('password'),
-        );
-    }
 }

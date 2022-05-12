@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Domain\IpAddressInfo\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Collection;
-use XbNz\Resolver\Domain\Ip\Actions\VerifyIpIntegrityAction;
-use XbNz\Resolver\Domain\Ip\DTOs\IpData;
-use XbNz\Resolver\Domain\Ip\Exceptions\InvalidIpAddressException;
 
 class AllArrayKeysAreValidIpAddressesRule implements Rule
 {
     public function passes($attribute, $value): bool
     {
         return ! Collection::make($value)
-            ->map(function ($ipAddress) {
+            ->map(function (string $ipAddress) {
                 return (bool) filter_var(
                     $ipAddress,
                     FILTER_VALIDATE_IP,

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Web\Authentication\Controllers;
 
 use App\Providers\RouteServiceProvider;
-use App\Web\Authentication\FormRequests\StoreRegisterRequest;
 use Domain\User\Actions\CreateUserFromRegistrationDataAction;
 use Domain\User\DataTransferObjects\RegisterUserData;
 use Illuminate\Auth\Events\Registered;

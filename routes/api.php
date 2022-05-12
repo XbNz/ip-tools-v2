@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,4 +26,3 @@ Route::name('ip.')->middleware(['throttle:20,1'])->group(function () {
     Route::post('/ip/advanced', \App\Api\IpAddressInfo\Controllers\AdvancedIpAddressInfoController::class)->name('advanced.show');
     //TODO: Add throttling for these routes (10/min/ip BUT respond to redis-cached IP requests)
 });
-

@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Support;
 
+use Illuminate\Support\Collection;
 use Support\Actions\FriendlyDriverNameAction;
-
+use XbNz\Resolver\Support\Drivers\Driver;
 
 class FriendlyDriverNameTest extends \Tests\TestCase
 {
-    /** @test **/
-    public function it_takes_a_driver_fqn_string_and_returns_the_website_name(): void
+    public function testItTakesADriverFqnStringAndReturnsTheWebsiteName(): void
     {
         // Arrange
         $driverFqn = SomeRandomDriverNamingConventionDotCom::class;

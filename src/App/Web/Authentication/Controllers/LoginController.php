@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Web\Authentication\Controllers;
 
-use App\Web\Authentication\FormRequests\StoreLoginRequest;
 use Domain\User\DataTransferObjects\LoginUserData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

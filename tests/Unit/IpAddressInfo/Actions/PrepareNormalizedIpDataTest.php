@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\IpAddressInfo\Actions;
 
 use Domain\IpAddressInfo\Actions\PrepareNormalizedIpDataAction;
@@ -11,8 +13,7 @@ use XbNz\Resolver\Domain\Ip\DTOs\NormalizedGeolocationResultsData;
 
 class PrepareNormalizedIpDataTest extends TestCase
 {
-    /** @test **/
-    public function it_takes_ip_addresses_and_returns_normalized_information_with_a_friendly_driver_name_as_the_key(): void
+    public function testItTakesIpAddressesAndReturnsNormalizedInformationWithAFriendlyDriverNameAsTheKey(): void
     {
         // Arrange
         $mock = $this->mock(IpBuilder::class);
@@ -27,15 +28,15 @@ class PrepareNormalizedIpDataTest extends TestCase
                 11.11,
                 22.22,
                 '::FakeLLC::',
-            )
+            ),
         ]);
-
 
         $action = app(PrepareNormalizedIpDataAction::class);
 
-
         // Act
-        Config::set(['services.ip_resolver_drivers_in_use' => ['::doesnt-matter::']]);
+        Config::set([
+            'services.ip_resolver_drivers_in_use' => ['::doesnt-matter::'],
+        ]);
         $result = $action(['1.1.1.1', '8.8.8.8']);
 
         // Assert

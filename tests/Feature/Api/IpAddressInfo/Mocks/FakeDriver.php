@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api\IpAddressInfo\Mocks;
 
 use XbNz\Resolver\Domain\Ip\DTOs\IpData;
@@ -39,11 +41,11 @@ class FakeDriver implements Driver
 
     public function requiresApiKey(): bool
     {
-        // TODO: Implement requiresApiKey() method.
+        
     }
 
     public function requiresFile(): bool
     {
-        // TODO: Implement requiresFile() method.
+        
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Web\Authentication\Controllers\LoginController;
+use App\Web\Authentication\Controllers\RegisterController;
 use App\Web\Homepage\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use App\Web\Authentication\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,6 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
 
 Route::name('auth.')->group(function () {
-
     Route::get('/login', [LoginController::class, 'create'])->name('login.create')
         ->middleware('guest');
 

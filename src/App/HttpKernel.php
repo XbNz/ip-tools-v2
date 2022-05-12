@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+declare(strict_types=1);
 
+namespace App;
 
 use Illuminate\Foundation\Http\Kernel;
 use Support\Middleware\HandleInertiaRequests;
@@ -40,7 +41,7 @@ class HttpKernel extends Kernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Support\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            HandleInertiaRequests::class
+            HandleInertiaRequests::class,
         ],
 
         'api' => [
