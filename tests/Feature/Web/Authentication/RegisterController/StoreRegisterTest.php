@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Web\Authentication\RegisterController;
 
+use App\Providers\RouteServiceProvider;
 use Domain\User\Models\User;
 use Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -35,6 +37,9 @@ class StoreRegisterTest extends TestCase
             'name' => '::John Doe::',
             'email' => 'john@gmail.com',
         ]);
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+        $this->assertAuthenticatedAs(User::where('email', 'john@gmail.com')->sole());
     }
 
     /** @test */
@@ -55,6 +60,14 @@ class StoreRegisterTest extends TestCase
         $password = User::first()->password;
         $this->assertStringNotContainsString('::secure-password-$$$$#::', $password);
         $this->assertTrue(Hash::check('::secure-password-$$$$#::', User::first()->password));
+    }
+
+    /** @test */
+    public function only_guests_can_register(): void
+    {
+        $this->assertRouteUsesMiddleware('auth.register.store', [
+            'guest'
+        ]);
     }
 
     /** @test */

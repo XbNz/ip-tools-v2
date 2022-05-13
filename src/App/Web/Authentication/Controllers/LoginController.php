@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Web\Authentication\Controllers;
 
+use App\Providers\RouteServiceProvider;
 use Domain\User\DataTransferObjects\LoginUserData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class LoginController
     {
         if (Auth::attempt($data->toArray())) {
             $request->session()->regenerate();
-            return Redirect::intended('/');
+            return Redirect::intended(RouteServiceProvider::HOME);
         }
 
         return Redirect::back()->withErrors([
