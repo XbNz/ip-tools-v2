@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class RegisterController
 {
@@ -36,6 +37,6 @@ class RegisterController
         $this->eventDispatcher->dispatch(new Registered($user));
 
         Auth::login($user);
-        return Redirect::to(RouteServiceProvider::HOME);
+        return Redirect::to(RouteServiceProvider::HOME, HttpResponse::HTTP_CREATED);
     }
 }
