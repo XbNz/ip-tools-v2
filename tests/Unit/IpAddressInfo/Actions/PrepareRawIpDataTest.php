@@ -26,17 +26,22 @@ class PrepareRawIpDataTest extends TestCase
                     '::doesnt::' => '::matter::',
                 ]
             ),
+            new RawResultsData(
+                FakeDotComDriver::class,
+                [
+                    '::doesnt::' => '::matter::',
+                ]
+            ),
         ]);
 
         $action = app(PrepareRawIpDataAction::class);
 
         // Act
-        Config::set([
-            'services.ip_resolver_drivers_in_use' => ['::doesnt-matter::'],
-        ]);
         $result = $action(['1.1.1.1', '8.8.8.8']);
 
         // Assert
         $this->assertArrayHasKey('fake.com', $result);
+        $this->assertCount(2, $result['fake.com']);
+        $this->assertContainsOnlyInstancesOf(RawResultsData::class, $result['fake.com']);
     }
 }

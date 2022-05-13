@@ -13,7 +13,8 @@ use XbNz\Resolver\Domain\Ip\DTOs\NormalizedGeolocationResultsData;
 
 class PrepareNormalizedIpDataTest extends TestCase
 {
-    public function testItTakesIpAddressesAndReturnsNormalizedInformationWithAFriendlyDriverNameAsTheKey(): void
+    /** @test */
+    public function it_takes_ip_addresses_and_returns_normalized_information_with_a_friendly_driver_name_as_the_key(): void
     {
         // Arrange
         $mock = $this->mock(IpBuilder::class);
@@ -29,17 +30,29 @@ class PrepareNormalizedIpDataTest extends TestCase
                 22.22,
                 '::FakeLLC::',
             ),
+            new NormalizedGeolocationResultsData(
+                FakeDotComDriver::class,
+                '8.8.8.8',
+                '::Fakemenistan::',
+                '::Fakesville::',
+                11.11,
+                22.22,
+                '::FakeLLC::',
+            ),
         ]);
 
         $action = app(PrepareNormalizedIpDataAction::class);
 
-        // Act
         Config::set([
             'services.ip_resolver_drivers_in_use' => ['::doesnt-matter::'],
         ]);
+
+        // Act
         $result = $action(['1.1.1.1', '8.8.8.8']);
 
         // Assert
         $this->assertArrayHasKey('fake.com', $result);
+        $this->assertCount(2, $result['fake.com']);
+        $this->assertContainsOnlyInstancesOf(NormalizedGeolocationResultsData::class, $result['fake.com']);
     }
 }

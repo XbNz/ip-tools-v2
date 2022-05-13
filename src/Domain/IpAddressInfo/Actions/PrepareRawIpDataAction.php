@@ -36,13 +36,13 @@ class PrepareRawIpDataAction
             ->withIps($ipAddresses)
             ->raw();
 
-        $raw = Collection::make($result)
-            ->mapWithKeys(fn (RawResultsData $data) => [
-                ($this->friendlyDriverName)($data->provider) => $data,
-            ])
-            ->toArray();
+        $grouped = Collection::make($result)->mapToGroups(function (RawResultsData $item) {
+            return [
+                ($this->friendlyDriverName)($item->provider) => $item
+            ];
+        });
 
-        Assert::allIsInstanceOf($raw, RawResultsData::class);
-        return $raw;
+        Assert::allIsInstanceOf($grouped->flatten(), RawResultsData::class);
+        return $grouped->toArray();
     }
 }

@@ -21,7 +21,7 @@ class PrepareNormalizedIpDataAction
     }
 
     /**
-     * @return array<string, NormalizedGeolocationResultsData>
+     * @return array<string, array<NormalizedGeolocationResultsData>>
      * @param array<string> $ipAddresses
      */
     public function __invoke(array $ipAddresses): array
@@ -37,13 +37,13 @@ class PrepareNormalizedIpDataAction
             ->withIps($ipAddresses)
             ->normalize();
 
-        $normalized =  Collection::make($result)
-            ->mapWithKeys(fn (NormalizedGeolocationResultsData $data) => [
-                ($this->friendlyDriverName)($data->provider) => $data,
-            ])
-            ->toArray();
+        $grouped = Collection::make($result)->mapToGroups(function (NormalizedGeolocationResultsData $item) {
+            return [
+                ($this->friendlyDriverName)($item->provider) => $item
+            ];
+        });
 
-        Assert::allIsInstanceOf($normalized, NormalizedGeolocationResultsData::class);
-        return $normalized;
+        Assert::allIsInstanceOf($grouped->flatten(), NormalizedGeolocationResultsData::class);
+        return $grouped->toArray();
     }
 }

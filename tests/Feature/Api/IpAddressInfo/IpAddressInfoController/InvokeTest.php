@@ -10,19 +10,10 @@ use Tests\TestCase;
 
 class InvokeTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp(); 
-        $this->app->when(GuaranteedIpDataAction::class)
-            ->needs('$drivers')
-            ->give(function ($app) {
-                return [new FakeDriver()];
-            });
-    }
-
 
     public function testGivenAValidIpv4OrIpv6AddressItReturnsGibberishDataFromFakeDriver(): void
     {
+        $this->withoutExceptionHandling();
         // Act
         $response = $this->json('post', route('ip.show'), [
             'ip_addresses' => ['1.1.1.1', '2606:4700:4700::1111'],
@@ -82,7 +73,7 @@ class InvokeTest extends TestCase
                 ]),
                 'key' =>
 'ip_addresses',
-                
+
             ],
         ];
     }
