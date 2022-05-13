@@ -16,9 +16,6 @@ class IpAddressInfoController
         IpInfoRequestData $data,
         PrepareNormalizedIpDataAction $normalizeIpDataAction,
     ): JsonResponse {
-
-        dd($normalizeIpDataAction($data->ip_addresses));
-
         return Response::json(
             $normalizeIpDataAction($data->ip_addresses)
         );

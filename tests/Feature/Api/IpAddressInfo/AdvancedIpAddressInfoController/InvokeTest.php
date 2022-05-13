@@ -4,83 +4,63 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\IpAddressInfo\AdvancedIpAddressInfoController;
 
-use Domain\IpAddressInfo\Actions\AdvancedIpDataAction;
-use function route;
-use Tests\Feature\Api\IpAddressInfo\Mocks\FakeDriver;
 use Tests\TestCase;
+use Tests\Unit\IpAddressInfo\Fakes\FakeDotComDriver;
+use XbNz\Resolver\Domain\Ip\Builders\IpBuilder;
+use XbNz\Resolver\Support\DTOs\RawResultsData;
 
 class InvokeTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->app->when(AdvancedIpDataAction::class)
-            ->needs('$drivers')
-            ->give(function ($app) {
-                return [new FakeDriver()];
-            });
-    }
 
-
-    public function testGivenAValidIpv4OrIpv6AddressItReturnsGibberishDataFromFakeDriver(): void
+    /** @test **/
+    public function given_a_list_of_valid_ip_addresses_it_returns_correctly_formatted_json(): void
     {
-        // Act
-        $response = $this->json('post', route('ip.advanced.show'), [
-            'ip_addresses' => ['1.1.1.1', '2606:4700:4700::1111'],
+        // Arrange
+        $mock = $this->mock(IpBuilder::class);
+        $mock->shouldReceive('withDrivers')->once();
+        $mock->shouldReceive('withIps')->once();
+        $mock->shouldReceive('raw')->once()->andReturn([
+            new RawResultsData(
+                FakeDotComDriver::class,
+                [
+                    '::doesnt::' => '::matter::',
+                ]
+            ),
+            new RawResultsData(
+                FakeDotComDriver::class,
+                [
+                    '::doesnt::' => '::matter::',
+                ]
+            ),
         ]);
+
+        $payload = [
+            'ip_addresses' => [
+                '1.1.1.1',
+                '2606:4700:4700::1111',
+            ]
+        ];
+
+        // Act
+        $response = $this->post(route('ip.advanced.show'), $payload);
 
         // Assert
         $response->assertOk();
-
         $response->assertJsonStructure([
-            'data' => [
+            'fake.com' => [
                 '*' => [
-                    '*' => [
-                        'driver',
-                        'data',
-                    ],
-                ],
-            ],
+                    'provider',
+                    'data' => [],
+                ]
+            ]
         ]);
+
+        $this->assertCount(2, $response->json()['fake.com']);
     }
 
-    /**
-     * @dataProvider validationProvider
-     */
-    public function testValidationTests(array $payload, string $key): void
+    /** @test **/
+    public function the_endpoint_is_throttled(): void
     {
-        // Act
-        $response = $this->json('post', route('ip.advanced.show'), $payload);
-
-        // Assert
-        $response->assertJsonValidationErrors(['ip_addresses']);
-    }
-
-    public function validationProvider(): \Generator
-    {
-        $defaultPayload = [
-            'ip_addresses' => [
-                '1.1.1.1', '9.9.9.9', '2606:4700:4700::1111',
-            ],
-        ];
-
-        yield from [
-            'addresses provided not public v4' => [
-                'payload' => array_merge($defaultPayload, [
-                    'ip_addresses' => ['127.0.0.1'],
-                ]),
-                'key' =>
-'ip_addresses',
-            ],
-
-            'addresses provided not public v6' => [
-                'payload' => array_merge($defaultPayload, [
-                    'ip_addresses' => ['fd00::/8'],
-                ]),
-                'key' =>
-'ip_addresses',
-
-            ],
-        ];
+        $this->assertRouteUsesMiddleware('ip.advanced.show', ['throttle:20,1']);
     }
 }
