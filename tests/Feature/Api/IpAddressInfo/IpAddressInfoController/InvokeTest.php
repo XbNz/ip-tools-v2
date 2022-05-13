@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\IpAddressInfo\IpAddressInfoController;
 
 use Domain\IpAddressInfo\Actions\GuaranteedIpDataAction;
+use Domain\IpAddressInfo\Actions\PrepareNormalizedIpDataAction;
+use Domain\IpAddressInfo\Actions\PrepareRawIpDataAction;
+use Generator;
+use Illuminate\Support\Collection;
 use Tests\Feature\Api\IpAddressInfo\Mocks\FakeDriver;
 use Tests\TestCase;
 use Tests\Unit\IpAddressInfo\Fakes\FakeDotComDriver;
@@ -71,9 +75,50 @@ class InvokeTest extends TestCase
         $this->assertCount(2, $response->json()['fake.com']);
     }
 
+    /**
+     * @test
+     * @dataProvider validationProvider
+     **/
+    public function validation_prevents_invalid_ips_inside_of_json(string ...$payload): void
+    {
+        // Act
+
+        foreach ($payload as $ipAddress) {
+            $response = $this->post(route('ip.show'), [
+                'ip_addresses' => [$ipAddress]
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('ip_addresses');
+        }
+    }
+
     /** @test **/
     public function the_endpoint_is_throttled(): void
     {
         $this->assertRouteUsesMiddleware('ip.show', ['throttle:20,1']);
+    }
+
+    public function validationProvider(): Generator
+    {
+
+        $ipAddresses = [
+            '10.0.0.0',
+            '172.16.0.0',
+            '192.168.0.0',
+            '0.0.0.0',
+            '127.0.0.0',
+            '169.254.0.0',
+            '240.0.0.0',
+            '255.255.255.255',
+            'fd12:3456:789a:1::1',
+            'fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+            'fe80::ffff:ffff:ffff:ffff',
+            '::1',
+        ];
+
+        foreach ($ipAddresses as $ipAddress) {
+            yield [$ipAddress];
+        }
     }
 }

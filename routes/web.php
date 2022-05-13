@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/', HomeController::class)->name('home.index');
-});
+//Route::middleware(['auth'])->group(function () {
+//
+//});
 
+Route::get('/', HomeController::class)->name('home.index');
 
-Route::post('/login', [LoginController::class, 'store'])->name('auth.login.store');
 
 Route::name('auth.')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login.create')
