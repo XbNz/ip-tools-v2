@@ -1,5 +1,7 @@
 <template>
-<!--  Make a login form using Tailwind CSS for styling  -->
+    <Head>
+        <title>Login</title>
+    </Head>
 
     <div class="flex flex-col items-center justify-center h-screen">
         <div class="w-1/2">
