@@ -20504,8 +20504,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   )])])]), _hoisted_28, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Mapbox"], {
     key: $setup.activeApiProvider,
     mapboxBuildInfo: [{
-      ip: $setup.activeApiProvider.ip,
-      coordinates: [$setup.activeApiProvider.longitude, $setup.activeApiProvider.latitude]
+      ip: $setup.activeApiProvider[0].ip,
+      coordinates: [$setup.activeApiProvider[0].longitude, $setup.activeApiProvider[0].latitude]
     }],
     "bind-to": "map-home"
   }, null, 8
@@ -20785,8 +20785,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       )])])]), _hoisted_25, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Mapbox"], {
         key: $setup.activeApiProvider,
         mapboxBuildInfo: [{
-          ip: $setup.activeApiProvider.ip,
-          coordinates: [$setup.activeApiProvider.longitude, $setup.activeApiProvider.latitude]
+          ip: $setup.activeApiProvider[0].ip,
+          coordinates: [$setup.activeApiProvider[0].longitude, $setup.activeApiProvider[0].latitude]
         }],
         "bind-to": "map-modal"
       }, null, 8

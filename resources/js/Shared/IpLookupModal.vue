@@ -75,8 +75,8 @@
                     <div id="map-modal" class="w-4/12 ml-10 mt-4 p-4"/>
 
                     <Mapbox :key="activeApiProvider" :mapboxBuildInfo="[{
-                        ip: activeApiProvider.ip,
-                        coordinates: [activeApiProvider.longitude, activeApiProvider.latitude]
+                        ip: activeApiProvider[0].ip,
+                        coordinates: [activeApiProvider[0].longitude, activeApiProvider[0].latitude]
                     }]" bind-to="map-modal"/>
                 </div>
 

@@ -2,6 +2,7 @@
 
 use XbNz\Resolver\Domain\Ip\Drivers\AbstractApiDotComDriver;
 use XbNz\Resolver\Domain\Ip\Drivers\AbuseIpDbDotComDriver;
+use XbNz\Resolver\Domain\Ip\Drivers\IpApiDotComDriver;
 use XbNz\Resolver\Domain\Ip\Drivers\IpDataDotCoDriver;
 use XbNz\Resolver\Domain\Ip\Drivers\IpGeolocationDotIoDriver;
 use XbNz\Resolver\Domain\Ip\Drivers\IpInfoDotIoDriver;
@@ -27,6 +28,10 @@ return [
 
         IpDataDotCoDriver::class => [
             env('IP_DATA_DOT_CO_KEY_1')
+        ],
+
+        IpApiDotComDriver::class => [
+            env('IP_API_DOT_COM_KEY_1')
         ],
     ],
 

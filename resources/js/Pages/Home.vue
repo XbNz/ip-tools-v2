@@ -76,8 +76,8 @@
                     </div>
 
                     <Mapbox :key="activeApiProvider" :mapboxBuildInfo="[{
-                            ip: activeApiProvider.ip,
-                            coordinates: [activeApiProvider.longitude, activeApiProvider.latitude]
+                            ip: activeApiProvider[0].ip,
+                            coordinates: [activeApiProvider[0].longitude, activeApiProvider[0].latitude]
                         }]" bind-to="map-home"/>
                 </div>
 
