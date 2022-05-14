@@ -12,10 +12,11 @@ class CreateUserFromRegistrationDataAction
 {
     public function __invoke(RegisterUserData $data): User
     {
-        return User::create([
-            'name' => $data->name,
-            'email' => $data->email,
-            'password' => Hash::make($data->password),
-        ]);
+        return User::query()
+            ->create([
+                'name' => $data->name,
+                'email' => $data->email,
+                'password' => Hash::make($data->password),
+            ]);
     }
 }

@@ -47,27 +47,27 @@
                         <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
                             <div class="flex">
                                 <h2 class="font-bold">IP address: &nbsp;</h2>
-                                <p>{{ activeApiProvider.ip }}</p>
+                                <p>{{ activeApiProvider[0].ip }}</p>
                             </div>
                             <div class="flex">
                                 <h2 class="font-bold">Country: &nbsp;</h2>
-                                <p>{{ activeApiProvider.country }}</p>
+                                <p>{{ activeApiProvider[0].country }}</p>
                             </div>
                             <div class="flex">
                                 <h2 class="font-bold">City: &nbsp;</h2>
-                                <p>{{ activeApiProvider.city }}</p>
+                                <p>{{ activeApiProvider[0].city }}</p>
                             </div>
                             <div class="flex">
                                 <h2 class="font-bold">Latitude: &nbsp;</h2>
-                                <p>{{ activeApiProvider.latitude }}</p>
+                                <p>{{ activeApiProvider[0].latitude }}</p>
                             </div>
                             <div class="flex">
                                 <h2 class="font-bold">Longitude: &nbsp;</h2>
-                                <p>{{ activeApiProvider.longitude }}</p>
+                                <p>{{ activeApiProvider[0].longitude }}</p>
                             </div>
                             <div class="flex">
                                 <h2 class="font-bold">Organization: &nbsp;</h2>
-                                <p>{{ activeApiProvider.organization }}</p>
+                                <p>{{ activeApiProvider[0].organization }}</p>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <h1 class="justify-center flex mb-3 font-bold">Info</h1>
                             <div class="bg-white rounded-lg shadow-lg p-3 outline outline-amber-600">
                                 <div class="flex">
-                                    <pre>{{ activeAdvancedApiProvider.data }}</pre>
+                                    <pre>{{ activeAdvancedApiProvider[0].data }}</pre>
                                 </div>
                             </div>
                         </div>
