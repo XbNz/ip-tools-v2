@@ -19,10 +19,10 @@ class HomeController
     ): Response {
 
         $props = [
-            'advancedClientIpData' => $rawAction([$request->getClientIp()]),
-            'guaranteedClientIpData' => $normalizeAction([$request->getClientIp()]),
-//            'advancedClientIpData' => $rawAction(['1.1.1.1']),
-//            'guaranteedClientIpData' => $normalizeAction(['1.1.1.1']),
+//            'advancedClientIpData' => $rawAction([$request->getClientIp()]),
+//            'guaranteedClientIpData' => $normalizeAction([$request->getClientIp()]),
+            'advancedClientIpData' => $rawAction(['1.1.1.1']),
+            'guaranteedClientIpData' => $normalizeAction(['1.1.1.1']),
         ];
 
         return Inertia::render('Home', $props);

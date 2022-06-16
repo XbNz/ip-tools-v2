@@ -38,18 +38,7 @@
                 </Navlink>
             </li>
 
-            <li v-if="$page.props.authenticated === true">
-                <Navlink :href="route('auth.login.destroy')" method="POST">
-                    <span class="flex">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                             stroke="currentColor" stroke-width="2">
-  <path stroke-linecap="round" stroke-linejoin="round"
-        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-</svg>
-                        <p class="ml-1">Logout</p>
-                    </span>
-                </Navlink>
-            </li>
+
 
             <li v-if="$page.props.authenticated === false">
                 <Navlink :href="route('auth.register.create')" method="GET">
@@ -62,6 +51,17 @@
                 </Navlink>
             </li>
 
+            <li v-if="$page.props.authenticated === true">
+                <Navlink :href="route('auth.login.create')" method="GET">
+                    <span class="flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+</svg>
+                        <p class="ml-1">Uptime Monitoring</p>
+                    </span>
+                </Navlink>
+            </li>
+
             <li v-if="$page.props.authenticated === false">
                 <Navlink :href="route('auth.login.create')" method="GET">
                     <span class="flex">
@@ -69,6 +69,19 @@
   <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
 </svg>
                         <p class="ml-1">Login</p>
+                    </span>
+                </Navlink>
+            </li>
+
+            <li v-if="$page.props.authenticated === true">
+                <Navlink :href="route('auth.login.destroy')" method="POST">
+                    <span class="flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+  <path stroke-linecap="round" stroke-linejoin="round"
+        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+</svg>
+                        <p class="ml-1">Logout</p>
                     </span>
                 </Navlink>
             </li>
