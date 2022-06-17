@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Web\Authentication\Controllers\LoginController;
 use App\Web\Authentication\Controllers\RegisterController;
 use App\Web\Homepage\Controllers\HomeController;
+use App\Web\Subscription\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,4 +41,8 @@ Route::name('auth.')->group(function () {
 
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store')
         ->middleware(['guest', 'throttle:50,1']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/subscribe', [SubscriptionController::class, 'create'])->name('subscription.create');
 });

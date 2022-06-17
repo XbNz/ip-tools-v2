@@ -9,6 +9,7 @@
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.4",
         "inertiajs/inertia-laravel": "^0.5.4",
+        "laravel/cashier": "^13.11",
         "laravel/framework": "^9.4.1",
         "laravel/octane": "^1.2",
         "laravel/sanctum": "^2.11",
