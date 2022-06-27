@@ -4,13 +4,13 @@ return [
     'use_proxy' => false,
     'proxies' => [],
 
-    'timeout' => 2,
+    'timeout' => 10,
     'cache_period' => 864000,
 
-    'async_concurrent_requests' => 10,
+    'async_concurrent_requests' => 5,
 
     'use_retries' => true,
-    'tries' => 3,
-    'retry_sleep' => 1,
+    'tries' => 5,
+    'retry_sleep' => 3,
     'retry_sleep_multiplier' => 1.5,
 ];
