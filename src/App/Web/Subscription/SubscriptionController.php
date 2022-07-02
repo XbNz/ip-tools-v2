@@ -18,6 +18,7 @@ class SubscriptionController
                 'cancel_url' => route('home.index'),
             ]);
 
+
         return Inertia::render('Subscription/Manage', [
             'stripeKey' => config('cashier.key'),
             'checkoutSessionId' => $checkout->id,
