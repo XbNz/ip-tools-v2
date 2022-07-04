@@ -32,4 +32,14 @@ class UserFactory extends Factory
             ];
         });
     }
+
+    public function subscribed(): Factory
+    {
+        //TODO: Make factory for subscribed user
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
+    }
 }

@@ -10,12 +10,10 @@ class HasSubscriptionMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()?->subscribed('lite') !== true) {
+        if ($request->user()?->subscribed() !== true) {
             return Redirect::route('subscription.create');
         }
 
-        // TODO: Test this
-        // TODO: Create a subscriptions table matching stripe's with permission configs
         return $next($request);
     }
 }

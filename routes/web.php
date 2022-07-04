@@ -6,7 +6,9 @@ use App\Web\Authentication\Controllers\LoginController;
 use App\Web\Authentication\Controllers\RegisterController;
 use App\Web\Homepage\Controllers\HomeController;
 use App\Web\Subscription\SubscriptionController;
+use App\Web\Uptime\Controllers\UptimeController;
 use Illuminate\Support\Facades\Route;
+use Tests\Feature\Web\Uptime\PingController\PingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +44,13 @@ Route::name('auth.')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/subscribe', [SubscriptionController::class, 'create'])->name('subscription.create');
+});
+
+
+Route::name('uptime.')->group(function () {
+    Route::get('/uptime', UptimeController::class)->name('index');
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/uptime/ping', [PingController::class, 'index'])->name('ping.index');
+    });
 });
